@@ -23,7 +23,15 @@ public class ShipManager : MonoBehaviour {
     private GameObject spawnedWingRight;
 
     void Start () {
+        GenerateShip();
+        GameObject cam = GameObject.FindGameObjectWithTag("MainCamera");
+        cam.transform.parent = spawnedShip.transform;
+        cam.transform.position = spawnedShip.transform.position + new Vector3(0.0f, 20.0f, -40.0f);
+        cam.transform.LookAt(spawnedShip.transform);
+    }
 
+    void GenerateShip()
+    {
         List<GameObject> visors = new List<GameObject>();
         visors.Add(visor1);
         visors.Add(visor2);
@@ -56,7 +64,7 @@ public class ShipManager : MonoBehaviour {
         Vector3 leftWingPos = spawnedShip.transform.GetChild(2).transform.position;
         Vector3 backLeftWingPos = spawnedShip.transform.GetChild(3).transform.position;
         Vector3 backRightWingPos = spawnedShip.transform.GetChild(4).transform.position;
-        
+
         spawnedVisor = Instantiate(visors[Random.Range(0, 2)], visorPos, spawnedShip.transform.rotation);           // one of two visors (windshields)
         spawnedVisor.transform.parent = spawnedShip.transform;
 
@@ -76,7 +84,7 @@ public class ShipManager : MonoBehaviour {
             int attachmentslots;
             if (wingSet == 0) { attachmentslots = 3; }          // determining how many slots we have for thrusters & weapons depending on wing type. Probably shouldn't hardcode this?
             else { attachmentslots = 1; }
-               
+
             int thrusterCount = Random.Range(0, attachmentslots + 1);       // Generate a random number of thrusters, use the rest for weapons
             int weaponCount = attachmentslots - thrusterCount;
 
@@ -131,7 +139,7 @@ public class ShipManager : MonoBehaviour {
             thruster2.transform.parent = spawnedWingRight.transform;
             thruster2.transform.Rotate(Vector3.left, -90.0f);
         }
-        
+
 
         iTween.MoveTo(SpaceParent, iTween.Hash("path", path, "speed", 10, "orienttopath", true, "looktime", .6, "eastype", "linear"));
     }
