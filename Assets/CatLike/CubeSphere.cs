@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using LibNoise;
-using LibNoise.Operator;
-using LibNoise.Generator;
+//using LibNoise;
+//using LibNoise.Operator;
+//using LibNoise.Generator;
 using System;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
@@ -30,62 +30,12 @@ public class CubeSphere : MonoBehaviour {
 	private void Generate () {
 		GetComponent<MeshFilter>().mesh = mesh = new Mesh();
 		mesh.name = "Procedural Cube";
-		CreateVertices();
+		//CreateVertices();
 		CreateTriangles();
 		CreateColliders();
 	}
 
-	private void CreateVertices () {
-        Perlin mySphere = new Perlin();
-        
-        ModuleBase myModule;
-        myModule = mySphere;
 
-        Noise2D heightMap;
-        heightMap = new Noise2D(gridSize, gridSize, myModule);
-        heightMap.GenerateSpherical(south, north, west, east);
-        Texture2D texture = heightMap.GetTexture(GradientPresets.Grayscale);
-
-        int cornerVertices = 8;
-		int edgeVertices = (gridSize + gridSize + gridSize - 3) * 4;
-		int faceVertices = (
-			(gridSize - 1) * (gridSize - 1) +
-			(gridSize - 1) * (gridSize - 1) +
-			(gridSize - 1) * (gridSize - 1)) * 2;
-		vertices = new Vector3[cornerVertices + edgeVertices + faceVertices];
-		normals = new Vector3[vertices.Length];
-		cubeUV = new Color32[vertices.Length];
-
-		int v = 0;
-		for (int y = 0; y <= gridSize; y++) {
-			for (int x = 0; x <= gridSize; x++) {
-				SetVertex(v++, x, (int)texture.GetPixel(x, y).grayscale, 0);
-			}
-			for (int z = 1; z <= gridSize; z++) {
-				SetVertex(v++, gridSize, (int)texture.GetPixel(z, y).grayscale, z);
-			}
-			for (int x = gridSize - 1; x >= 0; x--) {
-				SetVertex(v++, x, (int)texture.GetPixel(x, y).grayscale, gridSize);
-			}
-			for (int z = gridSize - 1; z > 0; z--) {
-				SetVertex(v++, 0, (int)texture.GetPixel(z, y).grayscale, z);
-			}
-		}
-		for (int z = 1; z < gridSize; z++) {
-			for (int x = 1; x < gridSize; x++) {
-				SetVertex(v++, x, (int)texture.GetPixel(x, z).grayscale, z);
-			}
-		}
-		for (int z = 1; z < gridSize; z++) {
-			for (int x = 1; x < gridSize; x++) {
-				SetVertex(v++, x, (int)texture.GetPixel(x, z).grayscale, z);
-			}
-		}
-
-		mesh.vertices = vertices;
-		mesh.normals = normals;
-		mesh.colors32 = cubeUV;
-	}
 
 	private void SetVertex (int i, int x, int y, int z) {
         Vector3 v = new Vector3(x, y, z) * 2f / gridSize - Vector3.one;

@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using LibNoise;
-using LibNoise.Operator;
-using LibNoise.Generator;
+//using LibNoise;
+//using LibNoise.Operator;
+//using LibNoise.Generator;
 using System;
 
 public class GenerateGalaxy : MonoBehaviour {
@@ -55,15 +55,15 @@ public class GenerateGalaxy : MonoBehaviour {
 
         sphereRenderer = sphere.GetComponent<Renderer>();
 
-        Perlin mySphere = new Perlin();
+        //Perlin mySphere = new Perlin();
 
-        ModuleBase myModule;
-        myModule = mySphere;
+        //ModuleBase myModule;
+        //myModule = mySphere;
 
-        Noise2D heightMap;
-        heightMap = new Noise2D(mapSizeX, mapSizeY, myModule);
-        heightMap.GenerateSpherical(south, north, west, east);
-        texture = heightMap.GetTexture(GradientPresets.Grayscale);
+        //Noise2D heightMap;
+        //heightMap = new Noise2D(mapSizeX, mapSizeY, myModule);
+        //heightMap.GenerateSpherical(south, north, west, east);
+        //texture = heightMap.GetTexture(GradientPresets.Grayscale);
        // sphereRenderer.material.mainTexture = texture;
 
         //// part 2

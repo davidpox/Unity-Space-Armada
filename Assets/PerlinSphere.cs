@@ -10,8 +10,12 @@ public class PerlinSphere : MonoBehaviour {
         Vector3[] verts = mSphere.vertices;
         for (int i = 0; i < verts.Length; i++)
         {
-            verts[i] += Mathf.PerlinNoise(
+            verts[i].x += (Perlin.Noise(verts[i]) * .2f);
+            verts[i].y += (Perlin.Noise(verts[i]) * .2f);
+            verts[i].z += (Perlin.Noise(verts[i]) * .2f);
         }
+        mSphere.vertices = verts;
+        mSphere.RecalculateBounds();
 	}
 	
 	// Update is called once per frame

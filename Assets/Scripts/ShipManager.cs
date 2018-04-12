@@ -27,7 +27,8 @@ public class ShipManager : MonoBehaviour {
         GameObject cam = GameObject.FindGameObjectWithTag("MainCamera");
         cam.transform.parent = spawnedShip.transform;
         cam.transform.position = spawnedShip.transform.position + new Vector3(0.0f, 20.0f, -40.0f);
-        cam.transform.LookAt(spawnedShip.transform);
+        cam.transform.LookAt(spawnedShip.transform);       
+        
     }
 
     void GenerateShip()

@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using LibNoise;
-using LibNoise.Operator;
-using LibNoise.Generator;
+//using LibNoise;
+//using LibNoise.Operator;
+//using LibNoise.Generator;
 
 public class SphereGenerator : MonoBehaviour {
 
@@ -26,15 +26,15 @@ public class SphereGenerator : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        Perlin mySphere = new Perlin();
+        //Perlin mySphere = new Perlin();
 
-        ModuleBase myModule;
-        myModule = mySphere;
+        //ModuleBase myModule;
+        //myModule = mySphere;
 
-        Noise2D heightMap;
-        heightMap = new Noise2D(mapSizeX, mapSizeY, myModule);
-        heightMap.GenerateSpherical(south, north, west, east);
-        texture = heightMap.GetTexture(GradientPresets.Grayscale);
+        //Noise2D heightMap;
+        //heightMap = new Noise2D(mapSizeX, mapSizeY, myModule);
+        //heightMap.GenerateSpherical(south, north, west, east);
+        //texture = heightMap.GetTexture(GradientPresets.Grayscale);
         MeshFilter filter = gameObject.AddComponent<MeshFilter>();
         Renderer renderer = gameObject.AddComponent<MeshRenderer>();
         if (renderer != null)
@@ -138,7 +138,22 @@ public class SphereGenerator : MonoBehaviour {
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
         mesh.RecalculateTangents();
-        ApplyHeightmap();
+        //ApplyHeightmap();
+        ApplyPerlinNoise();
+    }
+
+    void ApplyPerlinNoise()
+    {
+        Mesh mSphere = gameObject.GetComponent<MeshFilter>().mesh;
+        Vector3[] verts = mSphere.vertices;
+        for (int i = 0; i < verts.Length; i++)
+        {
+            verts[i].x += (Perlin.Noise(verts[i]) * .2f);
+            verts[i].y += (Perlin.Noise(verts[i]) * .2f);
+            verts[i].z += (Perlin.Noise(verts[i]) * .2f);
+        }
+        mSphere.vertices = verts;
+        mSphere.RecalculateBounds();
     }
 	
     void ApplyHeightmap()
