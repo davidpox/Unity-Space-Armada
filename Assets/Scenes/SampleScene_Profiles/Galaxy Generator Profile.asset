@@ -32,7 +32,7 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 21.7
+    value: 29.22
   threshold:
     overrideState: 0
     value: 1
@@ -77,7 +77,7 @@ MonoBehaviour:
     value: {fileID: 0}
   intensity:
     overrideState: 1
-    value: 0.209
+    value: 1
   fastMode:
     overrideState: 0
     value: 0
@@ -107,7 +107,7 @@ MonoBehaviour:
     value: {x: 0.5, y: 0.5}
   intensity:
     overrideState: 1
-    value: 0.42
+    value: 1
   smoothness:
     overrideState: 0
     value: 0.2

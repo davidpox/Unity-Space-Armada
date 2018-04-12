@@ -14,6 +14,13 @@ public class SphereGenerator : MonoBehaviour {
     private float west = -180.0f;
     private float east = 180.0f;
 
+    public float radius = 1f;
+    // Longitude |||
+    public int nbLong = 24;
+    // Latitude ---
+    public int nbLat = 16;
+
+
     // Use this for initialization
     void Start () {
         Perlin mySphere = new Perlin();
@@ -26,7 +33,7 @@ public class SphereGenerator : MonoBehaviour {
         heightMap.GenerateSpherical(south, north, west, east);
         Texture2D texture = heightMap.GetTexture(GradientPresets.Grayscale);
         MeshFilter filter = gameObject.AddComponent<MeshFilter>();
-        Renderer renderer = gameObject.AddComponent<Renderer>();
+        Renderer renderer = gameObject.AddComponent<MeshRenderer>();
         if (renderer != null)
         {
             print("materials shizzz");
@@ -39,12 +46,6 @@ public class SphereGenerator : MonoBehaviour {
 
         Mesh mesh = filter.mesh;
         mesh.Clear();
-
-        float radius = 1f;
-        // Longitude |||
-        int nbLong = 24;
-        // Latitude ---
-        int nbLat = 16;
 
         #region Vertices
         Vector3[] vertices = new Vector3[(nbLong + 1) * nbLat + 2];
