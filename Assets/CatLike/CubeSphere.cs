@@ -11,7 +11,7 @@ public class CubeSphere : MonoBehaviour {
 
 	public int gridSize;
     public float radius = 1.0f;
-
+    
     private Mesh mesh;
 	private Vector3[] vertices;
 	private Vector3[] normals;
@@ -37,7 +37,7 @@ public class CubeSphere : MonoBehaviour {
 
 	private void CreateVertices () {
         Perlin mySphere = new Perlin();
-
+        
         ModuleBase myModule;
         myModule = mySphere;
 

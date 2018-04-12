@@ -40,12 +40,12 @@ public class GenerateGalaxy : MonoBehaviour {
 
     public int mapSizeX = 100;
     public int mapSizeY = 100;
-    public float south = -90.0f;
-    public float north = 90.0f;
-    public float west = -180.0f;
-    public float east = 180.0f;
+    private float south = -90.0f;
+    private float north = 90.0f;
+    private float west = -180.0f;
+    private float east = 180.0f;
 
-    public Renderer sphereRenderer;
+    private Renderer sphereRenderer;
     private Texture2D texture;
 
 
@@ -64,24 +64,22 @@ public class GenerateGalaxy : MonoBehaviour {
         heightMap = new Noise2D(mapSizeX, mapSizeY, myModule);
         heightMap.GenerateSpherical(south, north, west, east);
         texture = heightMap.GetTexture(GradientPresets.Grayscale);
-        sphereRenderer.material.mainTexture = texture;
+       // sphereRenderer.material.mainTexture = texture;
 
-        // part 2
+        //// part 2
+        //float lat, longi, height;
+        //Mesh mSphere = sphere.GetComponent<MeshFilter>().mesh;
+        //Vector3[] verts = mSphere.vertices;
+        //for (int i = 0; i < verts.Length; i++)
+        //{
+        //    lat = Vector3.Angle(Vector3.up, verts[i]);
+        //    longi = Vector3.SignedAngle(Vector3.right, verts[i], Vector3.up);
+        //    height = texture.GetPixelBilinear(lat / 180, longi / 360).r;
+        //    verts[i] *= (1 + 0.5f * height);
+        //}
+        //mSphere.vertices = verts;
+        //mSphere.RecalculateBounds();
 
-        Mesh sphereMesh = sphere.GetComponent<MeshFilter>().mesh;
-        Vector3[] verts = sphereMesh.vertices;
-        Vector3[] newVerts = new Vector3[verts.Length];
-
-        for (int x = 0; x < mapSizeX; x++)
-        {
-            for (int y = 0; y < mapSizeY; y++)
-            {
-                verts[x] += new Vector3(verts[x].x, texture.GetPixel(x, y).grayscale, verts[x].z);
-            }
-        }
-
-        sphereMesh.vertices = verts;
-        sphereMesh.RecalculateNormals();
     }
 
     void GenerateSpaceShipPath()
