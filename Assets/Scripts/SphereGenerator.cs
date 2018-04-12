@@ -39,7 +39,6 @@ public class SphereGenerator : MonoBehaviour {
         Renderer renderer = gameObject.AddComponent<MeshRenderer>();
         if (renderer != null)
         {
-            print("materials shizzz");
             renderer.sharedMaterial = new Material(Shader.Find("Standard"));
             //renderer.sharedMaterial.mainTexture = texture;
         }
