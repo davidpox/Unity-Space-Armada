@@ -20,6 +20,9 @@ public class SphereGenerator : MonoBehaviour {
     // Latitude ---
     public int nbLat = 16;
 
+    private Texture2D texture;
+
+    private Mesh mesh;
 
     // Use this for initialization
     void Start () {
@@ -31,20 +34,20 @@ public class SphereGenerator : MonoBehaviour {
         Noise2D heightMap;
         heightMap = new Noise2D(mapSizeX, mapSizeY, myModule);
         heightMap.GenerateSpherical(south, north, west, east);
-        Texture2D texture = heightMap.GetTexture(GradientPresets.Grayscale);
+        texture = heightMap.GetTexture(GradientPresets.Grayscale);
         MeshFilter filter = gameObject.AddComponent<MeshFilter>();
         Renderer renderer = gameObject.AddComponent<MeshRenderer>();
         if (renderer != null)
         {
             print("materials shizzz");
             renderer.sharedMaterial = new Material(Shader.Find("Standard"));
-            renderer.sharedMaterial.mainTexture = texture;
+            //renderer.sharedMaterial.mainTexture = texture;
         }
 
 
         /// eh
 
-        Mesh mesh = filter.mesh;
+        mesh = filter.mesh;
         mesh.Clear();
 
         #region Vertices
@@ -136,8 +139,27 @@ public class SphereGenerator : MonoBehaviour {
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
         mesh.RecalculateTangents();
+        ApplyHeightmap();
     }
 	
+    void ApplyHeightmap()
+    {
+        Vector3[] verts = mesh.vertices;
+        float lat, longi, height;
+        for (int i = 0; i < verts.Length; i++)
+        {
+            lat = Vector3.Angle(Vector3.up, verts[i]);
+            longi = Vector3.SignedAngle(Vector3.right, verts[i], Vector3.up);
+            longi = (longi + 360) % 360;
+            height = texture.GetPixelBilinear(longi / 360, lat / 180).r;
+            verts[i] *= (1 + 1 * height);
+        }
+        mesh.vertices = verts;
+        mesh.RecalculateBounds();
+        mesh.RecalculateNormals();
+        mesh.RecalculateTangents();
+    }
+
 	// Update is called once per frame
 	void Update () {
 		

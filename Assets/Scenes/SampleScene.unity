@@ -597,8 +597,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f45acf1dad9a92448be2fda7f068c2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapSizeX: 100
-  mapSizeY: 100
+  mapSizeX: 52
+  mapSizeY: 52
   radius: 4
   nbLong: 52
   nbLat: 52
