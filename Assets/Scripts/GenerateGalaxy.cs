@@ -10,8 +10,6 @@ public class GenerateGalaxy : MonoBehaviour {
 
     public GameObject star;
     public GameObject sun;
-    public GameObject cam;
-    public int numStars;
     public int revolutions;
 
     private GameObject player;
@@ -21,64 +19,20 @@ public class GenerateGalaxy : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         friendlyGalaxy = spawnStarsSpiral("Galaxy friendly");
-        friendlyGalaxy.transform.position = new Vector3(100.0f, 0.0f, 100.0f);
+        friendlyGalaxy.transform.position = new Vector3(200.0f, 0.0f, 200.0f);
         enemyGalaxy = spawnStarsSpiral("Galaxy enemy");
-        enemyGalaxy.transform.position = new Vector3(-100.0f, 0.0f, -100.0f);
-
-
+        enemyGalaxy.transform.position = new Vector3(-200.0f, 0.0f, -200.0f);
+        
         GenerateBossStar();
     }
 
-    // Update is called once per frame
-    void Update () {
-        //cam.transform.RotateAround(player.transform.position, Vector3.up, 10.0f * Time.deltaTime);
-	}
-
-
-
     /* TESTING */
-
-    public int mapSizeX = 100;
-    public int mapSizeY = 100;
-    private float south = -90.0f;
-    private float north = 90.0f;
-    private float west = -180.0f;
-    private float east = 180.0f;
-
-    private Renderer sphereRenderer;
-    private Texture2D texture;
-
 
     void GenerateBossStar()
     {
         GameObject sphere = GameObject.Find("testSphere");
 
-        sphereRenderer = sphere.GetComponent<Renderer>();
-
-        //Perlin mySphere = new Perlin();
-
-        //ModuleBase myModule;
-        //myModule = mySphere;
-
-        //Noise2D heightMap;
-        //heightMap = new Noise2D(mapSizeX, mapSizeY, myModule);
-        //heightMap.GenerateSpherical(south, north, west, east);
-        //texture = heightMap.GetTexture(GradientPresets.Grayscale);
-       // sphereRenderer.material.mainTexture = texture;
-
-        //// part 2
-        //float lat, longi, height;
-        //Mesh mSphere = sphere.GetComponent<MeshFilter>().mesh;
-        //Vector3[] verts = mSphere.vertices;
-        //for (int i = 0; i < verts.Length; i++)
-        //{
-        //    lat = Vector3.Angle(Vector3.up, verts[i]);
-        //    longi = Vector3.SignedAngle(Vector3.right, verts[i], Vector3.up);
-        //    height = texture.GetPixelBilinear(lat / 180, longi / 360).r;
-        //    verts[i] *= (1 + 0.5f * height);
-        //}
-        //mSphere.vertices = verts;
-        //mSphere.RecalculateBounds();
+        //sphereRenderer = sphere.GetComponent<Renderer>();
 
     }
 
@@ -94,9 +48,9 @@ public class GenerateGalaxy : MonoBehaviour {
         Sun.transform.parent = StarParent.transform;
         Sun.transform.position = Vector3.zero;
         
-        float A = 80.0f;       // galaxy size                      def: 40.0f
-        float B = 500.12f;       // Buldge-to-arm  (arm sweep)       def: 11.12f
-        float N = 0.806f;       // "Tightness" lower = less tight   def: 0.706f
+        float A = 80.0f;       // galaxy size                      def: 40.0f                     80.0f; 
+        float B = 500.12f;    // Buldge-to-arm  (arm sweep)       def: 11.12f                  500.12f
+        float N = 0.806f;       // "Tightness" lower = less tight   def: 0.706f                   0.806f;
 
         GameObject starInstance;
         Vector3 starScale;

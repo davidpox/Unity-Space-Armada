@@ -7,13 +7,6 @@ using UnityEngine;
 
 public class SphereGenerator : MonoBehaviour {
 
-    public int mapSizeX = 100;
-    public int mapSizeY = 100;
-    private float south = -90.0f;
-    private float north = 90.0f;
-    private float west = -180.0f;
-    private float east = 180.0f;
-
     public float radius = 1f;
     // Longitude |||
     public int nbLong = 24;
@@ -23,28 +16,15 @@ public class SphereGenerator : MonoBehaviour {
     private Texture2D texture;
 
     private Mesh mesh;
-
+    private MeshFilter filter;
+    private MeshRenderer renderer;
     // Use this for initialization
     void Start () {
-        //Perlin mySphere = new Perlin();
-
-        //ModuleBase myModule;
-        //myModule = mySphere;
-
-        //Noise2D heightMap;
-        //heightMap = new Noise2D(mapSizeX, mapSizeY, myModule);
-        //heightMap.GenerateSpherical(south, north, west, east);
-        //texture = heightMap.GetTexture(GradientPresets.Grayscale);
-        MeshFilter filter = gameObject.AddComponent<MeshFilter>();
-        Renderer renderer = gameObject.AddComponent<MeshRenderer>();
-        if (renderer != null)
-        {
-            renderer.sharedMaterial = new Material(Shader.Find("Standard"));
-            //renderer.sharedMaterial.mainTexture = texture;
-        }
+        filter = gameObject.AddComponent<MeshFilter>();
+        renderer = gameObject.AddComponent<MeshRenderer>();
+        renderer.material = new Material(Shader.Find("DAB/Vertex Detail Specular"));
 
 
-        /// eh
 
         mesh = filter.mesh;
         mesh.Clear();
@@ -138,8 +118,12 @@ public class SphereGenerator : MonoBehaviour {
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
         mesh.RecalculateTangents();
-        //ApplyHeightmap();
+
+        //float dist = Vector3.Distance(transform.position, vertices[20]);
+        //print(dist.ToString("F5"));
+
         ApplyPerlinNoise();
+        ApplyColours();
     }
 
     void ApplyPerlinNoise()
@@ -148,15 +132,58 @@ public class SphereGenerator : MonoBehaviour {
         Vector3[] verts = mSphere.vertices;
         for (int i = 0; i < verts.Length; i++)
         {
-            verts[i].x += (Perlin.Noise(verts[i]) * .2f);
-            verts[i].y += (Perlin.Noise(verts[i]) * .2f);
-            verts[i].z += (Perlin.Noise(verts[i]) * .2f);
+            verts[i].x += (Perlin.Noise(verts[i]) * .6f);
+            verts[i].y += (Perlin.Noise(verts[i]) * .6f);
+            verts[i].z += (Perlin.Noise(verts[i]) * .6f);
         }
         mSphere.vertices = verts;
         mSphere.RecalculateBounds();
     }
+
+    public Color GrassColor;
+    public Color WaterColor;
+    public Color SandColor;
+
+    void ApplyColours()
+    {
+        Color[] colours = new Color[mesh.vertices.Length];
+        float[] distances = new float[mesh.vertices.Length];
+
+        for(int i = 0; i < mesh.vertices.Length; i++)
+        {
+            distances[i] = Vector3.Distance(renderer.bounds.center - transform.position, mesh.vertices[i]);
+        }
+
+        float max = Mathf.Max(distances) - radius;
+        float min = Mathf.Min(distances) - radius;
+
+        for (int j = 0; j < mesh.vertices.Length; j++)
+        {
+            colours[j] = VertexColor(distances[j] - radius, (max + min) / 2.0f);
+        }
+
+        print(distances[23]);
+        mesh.colors = colours;
+    }
+
+    Color VertexColor(float distance, float mid)
+    {
+        if (distance > 1.0f)
+        {
+            return GrassColor;
+        }
+        if (distance < -0.1f)
+        {
+            return SandColor;
+        }
+        if (distance < -0.2f)
+        {
+            return WaterColor;
+        }
+        return WaterColor;
+    }
 	
-    void ApplyHeightmap()
+    /* void ApplyHeightmap()
     {
         Vector3[] verts = mesh.vertices;
         float lat, longi, height;
@@ -172,10 +199,5 @@ public class SphereGenerator : MonoBehaviour {
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
         mesh.RecalculateTangents();
-    }
-
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    } */
 }

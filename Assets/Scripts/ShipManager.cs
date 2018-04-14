@@ -142,7 +142,9 @@ public class ShipManager : MonoBehaviour {
         }
 
 
-        iTween.MoveTo(SpaceParent, iTween.Hash("path", path, "speed", 10, "orienttopath", true, "looktime", .6, "eastype", "linear"));
+
+        SpaceParent.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+        iTween.MoveTo(SpaceParent, iTween.Hash("path", path, "speed", 10, "orienttopath", true, "looktime", .6, "eastype", "linear", "looptype", "loop"));
     }
 
     void OnDrawGizmos()
