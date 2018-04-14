@@ -169,5 +169,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GrassColor: {r: 0.18235517, g: 0.6226415, b: 0.1321645, a: 0}
-  WaterColor: {r: 0.18396229, g: 0.49631163, b: 1, a: 0}
-  SandColor: {r: 0.8113208, g: 0.7772729, b: 0.11863652, a: 0}
+  AstroidMaterial: {fileID: 2100000, guid: 7d2ec34560baace4b8c0ba16f70e9dd7, type: 2}

@@ -122,66 +122,10 @@ public class SphereGenerator : MonoBehaviour {
         //float dist = Vector3.Distance(transform.position, vertices[20]);
         //print(dist.ToString("F5"));
 
-        ApplyPerlinNoise();
-        ApplyColours();
+        //ApplyPerlinNoise();
+        //ApplyColours();
     }
-
-    void ApplyPerlinNoise()
-    {
-        Mesh mSphere = gameObject.GetComponent<MeshFilter>().mesh;
-        Vector3[] verts = mSphere.vertices;
-        for (int i = 0; i < verts.Length; i++)
-        {
-            verts[i].x += (Perlin.Noise(verts[i]) * .6f);
-            verts[i].y += (Perlin.Noise(verts[i]) * .6f);
-            verts[i].z += (Perlin.Noise(verts[i]) * .6f);
-        }
-        mSphere.vertices = verts;
-        mSphere.RecalculateBounds();
-    }
-
-    public Color GrassColor;
-    public Color WaterColor;
-    public Color SandColor;
-
-    void ApplyColours()
-    {
-        Color[] colours = new Color[mesh.vertices.Length];
-        float[] distances = new float[mesh.vertices.Length];
-
-        for(int i = 0; i < mesh.vertices.Length; i++)
-        {
-            distances[i] = Vector3.Distance(renderer.bounds.center - transform.position, mesh.vertices[i]);
-        }
-
-        float max = Mathf.Max(distances) - radius;
-        float min = Mathf.Min(distances) - radius;
-
-        for (int j = 0; j < mesh.vertices.Length; j++)
-        {
-            colours[j] = VertexColor(distances[j] - radius, (max + min) / 2.0f);
-        }
-
-        print(distances[23]);
-        mesh.colors = colours;
-    }
-
-    Color VertexColor(float distance, float mid)
-    {
-        if (distance > 1.0f)
-        {
-            return GrassColor;
-        }
-        if (distance < -0.1f)
-        {
-            return SandColor;
-        }
-        if (distance < -0.2f)
-        {
-            return WaterColor;
-        }
-        return WaterColor;
-    }
+  
 	
     /* void ApplyHeightmap()
     {

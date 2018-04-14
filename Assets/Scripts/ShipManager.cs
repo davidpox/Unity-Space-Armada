@@ -26,7 +26,7 @@ public class ShipManager : MonoBehaviour {
         GenerateShip();
         GameObject cam = GameObject.FindGameObjectWithTag("MainCamera");
         cam.transform.parent = spawnedShip.transform;
-        cam.transform.position = spawnedShip.transform.position + new Vector3(0.0f, 20.0f, -40.0f);
+        cam.transform.position = spawnedShip.transform.position + new Vector3(0.0f, 10.0f, -20.0f);
         cam.transform.LookAt(spawnedShip.transform);       
         
     }
@@ -54,8 +54,7 @@ public class ShipManager : MonoBehaviour {
         bool backThrusters = (Random.value > 0.5f);
 
 
-        GameObject SpaceParent = Instantiate(new GameObject());
-        SpaceParent.name = "Spacecraft";
+        GameObject SpaceParent = new GameObject("Spacecraft");
 
         spawnedShip = Instantiate(ship, transform);
         spawnedShip.transform.parent = SpaceParent.transform;
