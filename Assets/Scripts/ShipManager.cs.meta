@@ -3,7 +3,18 @@ guid: f8342c786fb54e34cbad05a282aac27e
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - ship: {instanceID: 0}
+  - visor1: {instanceID: 0}
+  - visor2: {instanceID: 0}
+  - wing: {instanceID: 0}
+  - wing2: {instanceID: 0}
+  - wingBack: {instanceID: 0}
+  - thruster1: {instanceID: 0}
+  - thruster2: {instanceID: 0}
+  - turret1: {instanceID: 0}
+  - turret2: {instanceID: 0}
+  - missiles: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

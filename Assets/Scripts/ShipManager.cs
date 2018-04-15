@@ -16,22 +16,54 @@ public class ShipManager : MonoBehaviour {
     public GameObject turret2;
     public GameObject missiles;
     public Transform[] path;
+    public Transform[] circlePath;
 
-    private GameObject spawnedShip;
-    private GameObject spawnedVisor;
-    private GameObject spawnedWingLeft;
-    private GameObject spawnedWingRight;
+    private GameObject SpaceParent;
+    private GameObject SpaceChild;
+    private GameObject friendlyFleet;
+    private GameObject enemyFleet;
+    private GameObject test;
 
     void Start () {
-        GenerateShip();
-        GameObject cam = GameObject.FindGameObjectWithTag("MainCamera");
-        cam.transform.parent = spawnedShip.transform;
-        cam.transform.position = spawnedShip.transform.position + new Vector3(0.0f, 10.0f, -20.0f);
-        cam.transform.LookAt(spawnedShip.transform);       
-        
+
+        friendlyFleet = new GameObject("friendlyFleet");
+        friendlyFleet.transform.position = new Vector3(300, 20, 300);
+        enemyFleet = new GameObject("enemyFleet");
+        enemyFleet.transform.position = new Vector3(-300, 20, -300);
+
+        int z = 0;
+        int x = 0;
+        for (int i = 0; i < 9; i++) {
+            if (i % 3 == 0) { z += 10; x = 0; }
+            GameObject ship = GenerateShip(new Vector3(300, 20, 300) + new Vector3(x + Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), z + Random.Range(-3.0f, 3.0f)));
+            ship.transform.parent = friendlyFleet.transform;
+            GameObject ship2 = GenerateShip(new Vector3(-300, 20, -300) + new Vector3(x + Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), z + Random.Range(-3.0f, 3.0f)));
+            ship2.transform.parent = enemyFleet.transform;
+
+            x += 10;
+        }
+
+        test = GenerateShip(new Vector3(50, 0, 50));
+
+
+        //SpaceChild.transform.position = SpaceParent.transform.position + Vector3.back * 10;
+
+        //GameObject cam = GameObject.FindGameObjectWithTag("MainCamera");
+        //cam.transform.parent = SpaceParent.transform;
+        //cam.transform.position = SpaceParent.transform.position + new Vector3(0.0f, 10.0f, -20.0f);
+        //cam.transform.LookAt(SpaceParent.transform);
+
+
+        iTween.MoveTo(friendlyFleet, iTween.Hash("path", path, "speed", 30.0f, "orienttopath", true, "looktime", 0.6f, "easetype", iTween.EaseType.linear, "oncomplete", "activateCirclePath", "onCompleteTarget", GameObject.Find("Galaxy Generator")));
     }
 
-    void GenerateShip()
+    void Update()
+    {
+        test.transform.RotateAround(Vector3.zero, Vector3.up, 10.0f * Time.deltaTime);
+        test.transform.up = Vector3.zero;
+    }
+
+    GameObject GenerateShip(Vector3 pos)
     {
         List<GameObject> visors = new List<GameObject>();
         visors.Add(visor1);
@@ -51,13 +83,16 @@ public class ShipManager : MonoBehaviour {
         weapons.Add(turret2);
         weapons.Add(missiles);
 
-        bool backThrusters = (Random.value > 0.5f);
+        bool backThrusters = (Random.value > 0.7f);
 
 
-        GameObject SpaceParent = new GameObject("Spacecraft");
+        GameObject SpaceParentlocal = new GameObject("Spacecraft");
 
-        spawnedShip = Instantiate(ship, transform);
-        spawnedShip.transform.parent = SpaceParent.transform;
+        //Rigidbody rb = SpaceParentlocal.AddComponent<Rigidbody>();
+        //rb.useGravity = false;
+
+        GameObject spawnedShip = Instantiate(ship, transform);
+        spawnedShip.transform.parent = SpaceParentlocal.transform;
         //spawnedShip.transform.parent = GameObject.FindGameObjectWithTag("Player").transform;
         Vector3 visorPos = spawnedShip.transform.GetChild(0).transform.position;
         Vector3 rightWingPos = spawnedShip.transform.GetChild(1).transform.position;
@@ -65,7 +100,11 @@ public class ShipManager : MonoBehaviour {
         Vector3 backLeftWingPos = spawnedShip.transform.GetChild(3).transform.position;
         Vector3 backRightWingPos = spawnedShip.transform.GetChild(4).transform.position;
 
-        spawnedVisor = Instantiate(visors[Random.Range(0, 2)], visorPos, spawnedShip.transform.rotation);           // one of two visors (windshields)
+
+        GameObject spawnedWingLeft;
+        GameObject spawnedWingRight;
+
+        GameObject spawnedVisor = Instantiate(visors[Random.Range(0, 2)], visorPos, spawnedShip.transform.rotation);           // one of two visors (windshields)
         spawnedVisor.transform.parent = spawnedShip.transform;
 
         if (!backThrusters)                                                                  // if we're using front thrusters, use one of two wing styles 
@@ -91,11 +130,7 @@ public class ShipManager : MonoBehaviour {
             int thrusterSet = Random.Range(0, 2);                   // pick one of two thruster types
             int weaponSet = Random.Range(0, 3);                     // one of three weapon types
 
-
-            print("We want: " + thrusterCount.ToString() + " thrusters");       // TODO remove
-            print("We want: " + weaponCount.ToString() + " weapons");
-
-            int usedSlots = 0;  // counter to increment how many slots we have used already. Self-explanatory. // TODO remove this comment
+            int usedSlots = 0;
 
             for (int i = 0; i < thrusterCount; i++)
             {
@@ -106,8 +141,7 @@ public class ShipManager : MonoBehaviour {
                 thruster2.transform.parent = spawnedWingRight.transform;
 
                 attachmentslots--;                                                                                                                                  // remove an attachment slot for the weapons
-                usedSlots++;                                                                                                                                        // & saw we've used a slot (could probably deviate this from the attachmentSlots)
-                print("Spawning thruster!");
+                usedSlots++;                                                    // & say we've used a slot (could probably derive this from the attachmentSlots)
             }
             for (int j = 0; j < attachmentslots; j++)
             {
@@ -118,7 +152,6 @@ public class ShipManager : MonoBehaviour {
                 weapon2.transform.parent = spawnedWingRight.transform;
 
                 usedSlots++;
-                print("Spawning weapon!");
             }
         }
         else                                                                                  // else, instantiate the back wings & thrusters. No weapons on this guy. 
@@ -142,12 +175,31 @@ public class ShipManager : MonoBehaviour {
 
 
 
-        SpaceParent.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-        iTween.MoveTo(SpaceParent, iTween.Hash("path", path, "speed", 10, "orienttopath", true, "looktime", .6, "eastype", "linear", "looptype", "loop"));
+        SpaceParentlocal.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+
+        generateSpaceShipPath();
+        //SpaceParentlocal.transform.position = path[0].position;
+
+        SpaceParentlocal.transform.position = pos;
+        return SpaceParentlocal;
+    }
+
+    void generateSpaceShipPath()
+    {
+        for(int i = 0; i < circlePath.Length; i++)
+        {
+            circlePath[i].position += new Vector3(Random.Range(-5.0f, 5.0f), Random.Range(-5.0f, 5.0f), Random.Range(-5.0f, 5.0f));
+        }
+    }
+
+    void activateCirclePath()
+    {
+        iTween.MoveTo(SpaceParent, iTween.Hash("path", circlePath, "speed", 10.0f, "orienttopath", true, "looktime", 0.6f, "easetype", iTween.EaseType.linear, "looptype", iTween.LoopType.loop));
     }
 
     void OnDrawGizmos()
     {
-        iTween.DrawPath(path);
+        //iTween.DrawPath(path);
+        //iTween.DrawPath(circlePath);
     }
 }

@@ -24,7 +24,8 @@ public class PathExample : MonoBehaviour{
 	
 	void tween(){
 		iTween.MoveTo(gameObject,iTween.Hash("path",path,"time",7,"orienttopath",true,"looktime",.6,"easetype","easeInOutSine","oncomplete","complete"));	
-	}
+
+    }
 	
 	void reset(){
 		buttonActivated=false;
