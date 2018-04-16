@@ -21,8 +21,9 @@ GameObject:
   - component: {fileID: 4367109154408978}
   - component: {fileID: 33788533323195138}
   - component: {fileID: 23061051180056732}
+  - component: {fileID: 64486491803224584}
   m_Layer: 0
-  m_Name: icosphere
+  m_Name: Water
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39,7 +40,6 @@ GameObject:
   - component: {fileID: 33140581172441426}
   - component: {fileID: 23010485711323866}
   - component: {fileID: 114148404503542432}
-  - component: {fileID: 64383960774338930}
   m_Layer: 0
   m_Name: icosphere
   m_TagString: Untagged
@@ -150,7 +150,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1928070247428092}
-  m_Mesh: {fileID: 4300000, guid: f386f1d0f8c445e46a9d253e3319dbe4, type: 3}
+  m_Mesh: {fileID: 4300000, guid: f756a8ba2b039f94ab53788bfe2e99a3, type: 3}
 --- !u!33 &33788533323195138
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -158,17 +158,17 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1120317538753600}
   m_Mesh: {fileID: 4300000, guid: f386f1d0f8c445e46a9d253e3319dbe4, type: 3}
---- !u!64 &64383960774338930
+--- !u!64 &64486491803224584
 MeshCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1928070247428092}
+  m_GameObject: {fileID: 1120317538753600}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: f386f1d0f8c445e46a9d253e3319dbe4, type: 3}
@@ -185,3 +185,61 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GrassColor: {r: 0.18235517, g: 0.6226415, b: 0.1321645, a: 0}
   AstroidMaterial: {fileID: 2100000, guid: 7d2ec34560baace4b8c0ba16f70e9dd7, type: 2}
+  climates:
+  - name: Forest
+    WaterColor: {fileID: 2100000, guid: 562671cbb1514ae40bd98eb6ce883b1f, type: 2}
+    TerrainColor: {r: 0.18431373, g: 0.62352943, b: 0.13333334, a: 0}
+    Trees:
+    - {fileID: 100000, guid: d79007f6fd774a84094b09bff2209447, type: 3}
+    - {fileID: 100000, guid: ad7502fb5484a704787532d78eac472c, type: 3}
+    - {fileID: 100000, guid: d7afab674ec727e408ae15bd04a91ba9, type: 3}
+    Rocks:
+    - {fileID: 100000, guid: 4cf2bc08cb9ac0a4084ce34f07b3b8cc, type: 3}
+    - {fileID: 100000, guid: fd947908513529e4f8eaac8faa1074b9, type: 3}
+    - {fileID: 100000, guid: ea3185ef6744b1145a9843f90272eaca, type: 3}
+    Flowers:
+    - {fileID: 100000, guid: eb0cfcd4e1c935046abce01163185200, type: 3}
+    - {fileID: 100000, guid: 1fafca4acc3ca5a479710b41d43a6692, type: 3}
+    - {fileID: 100000, guid: fd3e3158567e4b14c982b94e93ac814b, type: 3}
+    GenerateWater: 1
+  - name: Oddity
+    WaterColor: {fileID: 2100000, guid: b207b83e710a0924980de0ecf62dcd00, type: 2}
+    TerrainColor: {r: 0, g: 1, b: 0.64271903, a: 0}
+    Trees:
+    - {fileID: 100000, guid: eaca24365482e224d98e023caf946725, type: 3}
+    - {fileID: 100000, guid: 6e48d111588be03419543e6d5b1ba41f, type: 3}
+    - {fileID: 100000, guid: 12258b800ddde3a4cbbf6f7f737f22eb, type: 3}
+    Rocks:
+    - {fileID: 100000, guid: d99a82a5e132a9c42b3cfce7ddea8c0d, type: 3}
+    - {fileID: 100000, guid: aea63a5a70442b34aa7ae2f174ab2dd0, type: 3}
+    - {fileID: 100000, guid: 2d1af115aa3f9d043883e4a240e0b89e, type: 3}
+    Flowers: []
+    GenerateWater: 1
+  - name: Hell
+    WaterColor: {fileID: 2100000, guid: 0b5682e526205ad4b9aae049362e810c, type: 2}
+    TerrainColor: {r: 0.5188679, g: 0, b: 0, a: 0}
+    Trees:
+    - {fileID: 100000, guid: 11d6fa9777edaa842a571984fd01d75f, type: 3}
+    - {fileID: 100000, guid: e2ec1109b5845364fb2d696fea46f23e, type: 3}
+    - {fileID: 100000, guid: 256a96423c3f93b469abfd1d4bb4fef0, type: 3}
+    Rocks:
+    - {fileID: 100000, guid: d0c1ca13572d53a4ebb34c76ed35c97c, type: 3}
+    - {fileID: 100000, guid: 42a839b78409b0b4c896cbceb27ba7ff, type: 3}
+    - {fileID: 100000, guid: c1141a4412e0c2748a68ba205e3c605d, type: 3}
+    Flowers: []
+    GenerateWater: 1
+  - name: Desert
+    WaterColor: {fileID: 0}
+    TerrainColor: {r: 0.8773585, g: 0.79271615, b: 0.3517711, a: 0}
+    Trees:
+    - {fileID: 100000, guid: b92d00d99de06e7488cc278f7d634d67, type: 3}
+    Rocks:
+    - {fileID: 100000, guid: 3d1947e4363588b4494bb1e237cea32e, type: 3}
+    - {fileID: 100000, guid: c9b6e38f0a078c94caa610dfd9536c3c, type: 3}
+    - {fileID: 100000, guid: e102ee7c71033444da3b49f336db6a08, type: 3}
+    - {fileID: 100000, guid: b87c68b1737b07e4f8bcbfb9dfec295f, type: 3}
+    Flowers: []
+    GenerateWater: 0
+  treesCount: 300
+  rockCount: 100
+  flowerCount: 200

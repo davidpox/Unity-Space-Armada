@@ -3,22 +3,55 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BossStarGenerator : MonoBehaviour {
-    private Mesh mesh;
-    private MeshRenderer renderer;
-    private GameObject astroid;
-    private GameObject AstroidParent;
-    private float radius;
     public Color GrassColor;
     public Material AstroidMaterial;
-    float yaw, pitch, roll;
+    public ClimateType[] climates;
+    public int treesCount;
+    public int rockCount;
+    public int flowerCount;
+
+
+    private ClimateType selectedClimate;
+    private Mesh mesh;
+    private new MeshRenderer renderer;
+    private GameObject astroid;
+    private GameObject AstroidParent;
+    private bool shouldSpawnAstroids;
+    private float yaw, pitch, roll;
+
+    [System.Serializable]
+    public struct ClimateType
+    {
+        public string name;
+        public Material WaterColor;
+        public Color TerrainColor;
+        public GameObject[] Trees;
+        public GameObject[] Rocks;
+        public GameObject[] Flowers;
+        public bool GenerateWater;
+    }
 
     // Use this for initialization
     void Start () {
 
-        yaw = Random.Range(-20.0f, 20.0f);
+        int c = Mathf.FloorToInt(Random.Range(0, 4));                                                                               // Select a random climate.
+        selectedClimate = climates[c];
+
+        yaw = Random.Range(-20.0f, 20.0f);                                                                                          // Random angle for astroid belt
         pitch = Random.Range(-20.0f, 20.0f);
         roll = Random.Range(-20.0f, 20.0f);
 
+        if (Random.Range(0.0f, 1.0f) > 0.5f) { spawnAstroidBelt(500, 100, 140, gameObject.transform.position); }                    // Should we spawn an astroid belt? 50% chance. 
+
+        GenerateMesh();                                                                                                             // Apply perlin noise to the sphere. 
+
+        ApplyColours();                                                                                                             // Give the sphere colours depending on climate. 
+                
+        GenerateFoliage();                                                                                                          // Generate extras (trees, rocks, flowers, etc.) 
+    }
+
+    void GenerateMesh()
+    {
         mesh = gameObject.GetComponent<MeshFilter>().mesh;
         renderer = gameObject.GetComponent<MeshRenderer>();
         renderer.material = new Material(Shader.Find("DAB/Vertex Detail Specular"));
@@ -33,30 +66,100 @@ public class BossStarGenerator : MonoBehaviour {
         mesh.vertices = verts;
         mesh.RecalculateBounds();
 
-        radius = renderer.bounds.extents.magnitude;
-        ApplyColours();
-
-        spawnAstroidBelt(500, 100, 140, Vector3.zero);
-        GenerateFoliage();
+        gameObject.AddComponent<MeshCollider>();
     }
 
     void Update()
     {
-        gameObject.transform.Rotate(AstroidParent.transform.up, 4.0f * Time.deltaTime);
+        if (shouldSpawnAstroids)
+        {
+            gameObject.transform.Rotate(AstroidParent.transform.up, 4.0f * Time.deltaTime);
+        } else
+        {
+            gameObject.transform.Rotate(Vector3.up, 4.0f * Time.deltaTime);
+        }
     }
 
 
     /* ================================= */
     void GenerateFoliage()
     {
-        for (int i = 0; i < 10; i++)
+        if(selectedClimate.GenerateWater)                                                                                           // Change water color depending on climate
         {
-            Vector3 randomSpherePoint = Random.onUnitSphere * 70;
-            RaycastHit hit;
-            Debug.DrawRay(randomSpherePoint, -randomSpherePoint, Color.white, 120);
-            if (Physics.Raycast(randomSpherePoint, -randomSpherePoint, out hit))
+            GameObject waterSphere = gameObject.transform.GetChild(0).gameObject;
+            MeshRenderer mr = waterSphere.GetComponent<MeshRenderer>();
+            mr.material = selectedClimate.WaterColor;
+        } else if (!selectedClimate.GenerateWater)                                                                                  // Or remove it if requested by climate
+        {
+            Destroy(gameObject.transform.GetChild(0).gameObject);
+        }
+
+        // Generate Trees
+        if (selectedClimate.Trees.Length > 0)
+        {
+            for (int i = 0; i < treesCount; i++)
             {
-                GameObject fol = Instantiate(astroid, hit.transform);
+                int treeIdx = Mathf.FloorToInt(Random.Range(0, selectedClimate.Trees.Length - 1));                                  // A random tree from the climate 
+                Vector3 randomSpherePoint = Random.onUnitSphere * 70;                                                               // Random Point on the sphere
+
+                RaycastHit hit;
+                if (Physics.Raycast(randomSpherePoint, -randomSpherePoint, out hit))
+                {
+                    if (hit.transform.name == "PlanetLand")                                                                         // Make sure we dont spawn in water!
+                    {
+                        GameObject fol = Instantiate(selectedClimate.Trees[treeIdx], hit.point, Quaternion.identity);
+                        fol.transform.parent = gameObject.transform;
+
+                        Vector3 forward = fol.transform.forward - (Vector3.Dot(fol.transform.forward, hit.normal)) * hit.normal;    // calculate how to position the foliage item to align with the hit normal
+                        fol.transform.rotation = Quaternion.LookRotation(forward, hit.normal);
+                    }
+                }
+            }
+        }
+
+        // Generate Rocks
+        if (selectedClimate.Rocks.Length > 0)
+        {
+            for (int i = 0; i < rockCount; i++)
+            {
+                int RockIdx = Mathf.FloorToInt(Random.Range(0, selectedClimate.Rocks.Length - 1));                                  // A random tree from the climate 
+                Vector3 randomSpherePoint = Random.onUnitSphere * 70;                                                               // Random Point on the sphere
+
+                RaycastHit hit;
+                if (Physics.Raycast(randomSpherePoint, -randomSpherePoint, out hit))
+                {
+                    if (hit.transform.name == "PlanetLand")                                                                         // Make sure we dont spawn in water!
+                    {
+                        GameObject fol = Instantiate(selectedClimate.Rocks[RockIdx], hit.point, Quaternion.identity);
+                        fol.transform.parent = gameObject.transform;
+
+                        Vector3 forward = fol.transform.forward - (Vector3.Dot(fol.transform.forward, hit.normal)) * hit.normal;    // calculate how to position the foliage item to align with the hit normal
+                        fol.transform.rotation = Quaternion.LookRotation(forward, hit.normal);
+                    }
+                }
+            }
+        }
+
+        // Generate Flowers
+        if (selectedClimate.Flowers.Length > 0)
+        {
+            for (int i = 0; i < flowerCount; i++)
+            {
+                int FlowerIdx = Mathf.FloorToInt(Random.Range(0, selectedClimate.Flowers.Length - 1));                              // A random tree from the climate 
+                Vector3 randomSpherePoint = Random.onUnitSphere * 70;                                                               // Random Point on the sphere
+
+                RaycastHit hit;
+                if (Physics.Raycast(randomSpherePoint, -randomSpherePoint, out hit))
+                {
+                    if (hit.transform.name == "PlanetLand")                                                                         // Make sure we dont spawn in water!
+                    {
+                        GameObject fol = Instantiate(selectedClimate.Flowers[FlowerIdx], hit.point, Quaternion.identity);
+                        fol.transform.parent = gameObject.transform;
+
+                        Vector3 forward = fol.transform.forward - (Vector3.Dot(fol.transform.forward, hit.normal)) * hit.normal;    // calculate how to position the foliage item to align with the hit normal
+                        fol.transform.rotation = Quaternion.LookRotation(forward, hit.normal);
+                    }
+                }
             }
         }
     }
@@ -69,7 +172,7 @@ public class BossStarGenerator : MonoBehaviour {
         for (int i = 0; i < mesh.vertices.Length; i++)
         {
             distances[i] = Vector3.Distance(renderer.bounds.center - transform.position, mesh.vertices[i]);
-            colours[i] = GrassColor;
+            colours[i] = selectedClimate.TerrainColor;
         }
         mesh.colors = colours;
     }

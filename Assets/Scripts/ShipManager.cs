@@ -17,12 +17,11 @@ public class ShipManager : MonoBehaviour {
     public GameObject missiles;
     public Transform[] path;
     public Transform[] circlePath;
-
-    private GameObject SpaceParent;
-    private GameObject SpaceChild;
+    
     private GameObject friendlyFleet;
     private GameObject enemyFleet;
     private GameObject test;
+    private GameObject testParent;
 
     void Start () {
 
@@ -43,7 +42,17 @@ public class ShipManager : MonoBehaviour {
             x += 10;
         }
 
-        test = GenerateShip(new Vector3(50, 0, 50));
+        //testParent = new GameObject("testParent");
+        //testParent.transform.position = new Vector3(50, 0, 50);
+
+        test = GenerateShip(new Vector3(50, 0, 100));
+        test.AddComponent<Orbit>();
+        test.GetComponent<Orbit>().orbitTarget = GameObject.Find("PlanetLand").transform;
+        test.GetComponent<Orbit>().distance = 70;
+        test.GetComponent<Orbit>().speed = 60;
+
+        //test.transform.position = testParent.transform.position + (Vector3.back * 5);
+        //test.transform.parent = testParent.transform;
 
 
         //SpaceChild.transform.position = SpaceParent.transform.position + Vector3.back * 10;
@@ -54,13 +63,13 @@ public class ShipManager : MonoBehaviour {
         //cam.transform.LookAt(SpaceParent.transform);
 
 
-        iTween.MoveTo(friendlyFleet, iTween.Hash("path", path, "speed", 30.0f, "orienttopath", true, "looktime", 0.6f, "easetype", iTween.EaseType.linear, "oncomplete", "activateCirclePath", "onCompleteTarget", GameObject.Find("Galaxy Generator")));
+        //iTween.MoveTo(friendlyFleet, iTween.Hash("path", path, "speed", 30.0f, "orienttopath", true, "looktime", 0.6f, "easetype", iTween.EaseType.linear, "oncomplete", "activateCirclePath", "onCompleteTarget", GameObject.Find("Galaxy Generator")));
     }
 
     void Update()
     {
-        test.transform.RotateAround(Vector3.zero, Vector3.up, 10.0f * Time.deltaTime);
-        test.transform.up = Vector3.zero;
+        //test.transform.RotateAround(Vector3.zero, Vector3.up, 10.0f * Time.deltaTime);
+        //test.transform.LookAt(Vector3.zero, -test.transform.up);
     }
 
     GameObject GenerateShip(Vector3 pos)
@@ -125,7 +134,6 @@ public class ShipManager : MonoBehaviour {
             else { attachmentslots = 1; }
 
             int thrusterCount = Random.Range(0, attachmentslots + 1);       // Generate a random number of thrusters, use the rest for weapons
-            int weaponCount = attachmentslots - thrusterCount;
 
             int thrusterSet = Random.Range(0, 2);                   // pick one of two thruster types
             int weaponSet = Random.Range(0, 3);                     // one of three weapon types
@@ -194,7 +202,7 @@ public class ShipManager : MonoBehaviour {
 
     void activateCirclePath()
     {
-        iTween.MoveTo(SpaceParent, iTween.Hash("path", circlePath, "speed", 10.0f, "orienttopath", true, "looktime", 0.6f, "easetype", iTween.EaseType.linear, "looptype", iTween.LoopType.loop));
+        //iTween.MoveTo(SpaceParent, iTween.Hash("path", circlePath, "speed", 10.0f, "orienttopath", true, "looktime", 0.6f, "easetype", iTween.EaseType.linear, "looptype", iTween.LoopType.loop));
     }
 
     void OnDrawGizmos()

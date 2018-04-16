@@ -17,7 +17,7 @@ public class SphereGenerator : MonoBehaviour {
 
     private Mesh mesh;
     private MeshFilter filter;
-    private MeshRenderer renderer;
+    private new MeshRenderer renderer;
     // Use this for initialization
     void Start () {
         filter = gameObject.AddComponent<MeshFilter>();
