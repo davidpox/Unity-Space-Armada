@@ -1,6 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using LibNoise.Unity;
+using LibNoise.Unity.Operator;
+using LibNoise.Unity.Generator;
 
 public class BossStarGenerator : MonoBehaviour {
     public Color GrassColor;
@@ -18,6 +22,8 @@ public class BossStarGenerator : MonoBehaviour {
     private GameObject AstroidParent;
     private bool shouldSpawnAstroids;
     private float yaw, pitch, roll;
+    private Perlin perlin;
+    private int astroidCount;
 
     [System.Serializable]
     public struct ClimateType
@@ -29,6 +35,11 @@ public class BossStarGenerator : MonoBehaviour {
         public GameObject[] Rocks;
         public GameObject[] Flowers;
         public bool GenerateWater;
+        public float maxLacunarity;
+        [Range(0.1f, 1.0f)]
+        public float maxPersistance;
+        public int maxOctaves;
+        public float maxFrequency;
     }
 
     // Use this for initialization
@@ -36,32 +47,74 @@ public class BossStarGenerator : MonoBehaviour {
 
         int c = Mathf.FloorToInt(Random.Range(0, 4));                                                                               // Select a random climate.
         selectedClimate = climates[c];
+        selectedClimate = climates[2];
 
         yaw = Random.Range(-20.0f, 20.0f);                                                                                          // Random angle for astroid belt
         pitch = Random.Range(-20.0f, 20.0f);
         roll = Random.Range(-20.0f, 20.0f);
 
-        if (Random.Range(0.0f, 1.0f) > 0.5f) { spawnAstroidBelt(500, 100, 140, gameObject.transform.position); }                    // Should we spawn an astroid belt? 50% chance. 
+        astroidCount = Random.Range(100, 500);
 
-        GenerateMesh();                                                                                                             // Apply perlin noise to the sphere. 
+        if (Random.Range(0.0f, 1.0f) > 0.5f) { spawnAstroidBelt(astroidCount, 100, 140, gameObject.transform.position); shouldSpawnAstroids = true; }                    // Should we spawn an astroid belt? 50% chance. 
+
+        GenerateMeshL();                                                                                                             // Apply perlin noise to the sphere. 
 
         ApplyColours();                                                                                                             // Give the sphere colours depending on climate. 
                 
         GenerateFoliage();                                                                                                          // Generate extras (trees, rocks, flowers, etc.) 
-    }
 
-    void GenerateMesh()
+        ApplyUI();
+    }
+    // Libnoise Perlin
+    void GenerateMeshL()
     {
         mesh = gameObject.GetComponent<MeshFilter>().mesh;
         renderer = gameObject.GetComponent<MeshRenderer>();
         renderer.material = new Material(Shader.Find("DAB/Vertex Detail Specular"));
 
         Vector3[] verts = mesh.vertices;
+
+        Vector3 _displacement = Random.Range(-10, 10) * Vector3.one;
+
+        perlin = new Perlin();
+
+        perlin.Seed = (int)System.DateTime.Now.Ticks;
+
+        //perlin.Lacunarity = selectedClimate.maxLacunarity;
+        perlin.Persistence = selectedClimate.maxPersistance;
+        perlin.OctaveCount = selectedClimate.maxOctaves;
+        perlin.Frequency = selectedClimate.maxFrequency;
+        
         for (int i = 0; i < verts.Length; i++)
         {
-            verts[i].x += (Perlin.Noise(verts[i]) * .2f);
-            verts[i].y += (Perlin.Noise(verts[i]) * .2f);
-            verts[i].z += (Perlin.Noise(verts[i]) * .2f);
+            verts[i].x += (float)perlin.GetValue(verts[i] + _displacement) * 0.2f;        //(Perlin.Fbm(verts[i], 2) * 0.6f);
+            verts[i].y += (float)perlin.GetValue(verts[i] + _displacement) * 0.2f;        //(Perlin.Fbm(verts[i], 2) * 0.6f);
+            verts[i].z += (float)perlin.GetValue(verts[i] + _displacement) * 0.2f;        //(Perlin.Fbm(verts[i], 2) * 0.6f);
+        }
+        mesh.vertices = verts;
+        mesh.RecalculateBounds();
+
+        gameObject.AddComponent<MeshCollider>();
+        
+    }
+    //Keijiro Perlin
+    void GenerateMeshK()
+    {
+        mesh = gameObject.GetComponent<MeshFilter>().mesh;
+        renderer = gameObject.GetComponent<MeshRenderer>();
+        renderer.material = new Material(Shader.Find("DAB/Vertex Detail Specular"));
+
+        Vector3[] verts = mesh.vertices;
+
+        int octave = Mathf.FloorToInt(Random.Range(1, 20));
+        print(octave);
+
+
+        for (int i = 0; i < verts.Length; i++)
+        {
+            verts[i].x += (KeijiroPerlin.Fbm(verts[i], octave) * 0.6f);        //(Perlin.Fbm(verts[i], 2) * 0.6f);
+            verts[i].y += (KeijiroPerlin.Fbm(verts[i], octave) * 0.6f);        //(Perlin.Fbm(verts[i], 2) * 0.6f);
+            verts[i].z += (KeijiroPerlin.Fbm(verts[i], octave) * 0.6f);        //(Perlin.Fbm(verts[i], 2) * 0.6f);
         }
         mesh.vertices = verts;
         mesh.RecalculateBounds();
@@ -92,6 +145,11 @@ public class BossStarGenerator : MonoBehaviour {
         } else if (!selectedClimate.GenerateWater)                                                                                  // Or remove it if requested by climate
         {
             Destroy(gameObject.transform.GetChild(0).gameObject);
+        }
+
+        if (selectedClimate.name == "Hell")
+        {
+            gameObject.transform.GetChild(0).localScale = new Vector3(1.03f, 1.03f, 1.03f);
         }
 
         // Generate Trees
@@ -213,11 +271,37 @@ public class BossStarGenerator : MonoBehaviour {
         Vector3[] verts = mesh.vertices;
         for (int i = 0; i < verts.Length; i++)
         {
-            verts[i].x += (Perlin.Noise(verts[i].normalized) * 0.3f);
-            verts[i].y += (Perlin.Noise(verts[i].normalized) * 0.3f);
-            verts[i].z += (Perlin.Noise(verts[i].normalized) * 0.3f);
+            verts[i].x += (KeijiroPerlin.Noise(verts[i].normalized) * 0.3f);
+            verts[i].y += (KeijiroPerlin.Noise(verts[i].normalized) * 0.3f);
+            verts[i].z += (KeijiroPerlin.Noise(verts[i].normalized) * 0.3f);
         }
         mesh.vertices = verts;
         mesh.RecalculateBounds();
+    }
+
+    public GameObject canvas;
+    public Text _txtClimate;
+    public Text _txtLacunarity;
+    public Text _txtPersistence;
+    public Text _txtOctaves;
+    public Text _txtFrequency;
+    public Text _txtAstroids;
+
+    void ApplyUI()
+    {
+        _txtClimate.text = "• Climate: " + selectedClimate.name;
+        _txtLacunarity.text  = "• Lacunarity: " + perlin.Lacunarity.ToString();
+        _txtPersistence.text  = "• Persistence: " + perlin.Persistence.ToString();
+        _txtOctaves.text  = "• Octaves: " + perlin.OctaveCount.ToString();
+        _txtFrequency.text  = "• Frequency: " + perlin.Frequency.ToString();
+
+        if(shouldSpawnAstroids) { _txtAstroids.text = "• Astroids: Yes, " + astroidCount.ToString(); }
+    }
+
+    public Toggle _ToggleUI;
+
+    public void ToggleUI()
+    {
+        canvas.SetActive(!canvas.activeInHierarchy);
     }
 }

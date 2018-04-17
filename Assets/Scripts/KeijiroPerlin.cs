@@ -8,7 +8,7 @@
 //
 using UnityEngine;
 
-public static class Perlin
+public static class KeijiroPerlin
 {
     #region Noise functions
 

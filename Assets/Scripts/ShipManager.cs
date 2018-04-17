@@ -45,7 +45,7 @@ public class ShipManager : MonoBehaviour {
         //testParent = new GameObject("testParent");
         //testParent.transform.position = new Vector3(50, 0, 50);
 
-        test = GenerateShip(new Vector3(50, 0, 100));
+        test = GenerateShip(new Vector3(50, 0, 200));
         test.AddComponent<Orbit>();
         test.GetComponent<Orbit>().orbitTarget = GameObject.Find("PlanetLand").transform;
         test.GetComponent<Orbit>().distance = 70;

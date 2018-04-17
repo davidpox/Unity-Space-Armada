@@ -1,51 +1,43 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Orbit : MonoBehaviour
 {
     public Transform orbitTarget; // Assign the sphere/planet you want to orbit
     public float speed; // how fast the ship is moving
     public float distance; // how far the ship will orbit
-    public bool updateDistance; // check this if you make changes to distance so the dummy's position will be updated
 
-    private Transform _directionDummy;
+    private Transform _pivot;
 
     private void Start()
     {
-        // Create a dummy object for the ship to look at, and position the dummy accordingly
-        if (_directionDummy == null)
-        {
-            _directionDummy = new GameObject("_dummy").GetComponent<Transform>();
-            _directionDummy.parent = orbitTarget;
-        }
+        _pivot = new GameObject("Pivot").GetComponent<Transform>();
+        //_pivot.rotation = Random.rotation;
+        transform.parent = _pivot;
+        transform.localPosition = Vector3.zero;
+        transform.rotation = _pivot.rotation;
 
-        _directionDummy.position = orbitTarget.position;
-        _directionDummy.Translate(new Vector3(0, 0, -distance));
-        transform.Translate(new Vector3(0, 0, 10));
+        InitializePivot();
     }
 
-    private void Update()
+    private void InitializePivot()
     {
-        UpdateDummy();
+        _pivot.parent = orbitTarget;
+        _pivot.localPosition = Vector3.zero;
+        _pivot.rotation = Random.rotation;
 
-        // Move the ship by following the dummy object and make it bottom side always face the sphere
-        Vector3 _worldUp = transform.position - orbitTarget.position;
-        transform.LookAt(_directionDummy, _worldUp * 2);
-        transform.Translate((Vector3.forward * speed * Time.deltaTime), Space.Self);
-
+        transform.Translate(new Vector3(0, 0, -distance), Space.Self);
+        if (speed >= 0)
+        {
+            transform.Rotate(0, -90, 90, Space.Self);
+        }
+        else
+        {
+            transform.Rotate(0, 90, 90, Space.Self);
+        }
     }
 
-    private void UpdateDummy()
+    private void LateUpdate()
     {
-        // Move the dummy around the sphere
-        if (updateDistance)
-        {
-            updateDistance = false;
-            Start();
-        }
-
-        _directionDummy.LookAt(orbitTarget, Vector3.up);
-        _directionDummy.Translate(Vector3.right * speed * Time.deltaTime, Space.Self);
+        _pivot.Rotate(Vector3.up, speed * Time.deltaTime, Space.Self);
     }
 }

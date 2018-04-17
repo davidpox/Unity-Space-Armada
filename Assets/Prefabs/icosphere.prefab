@@ -202,6 +202,10 @@ MonoBehaviour:
     - {fileID: 100000, guid: 1fafca4acc3ca5a479710b41d43a6692, type: 3}
     - {fileID: 100000, guid: fd3e3158567e4b14c982b94e93ac814b, type: 3}
     GenerateWater: 1
+    maxLacunarity: 10
+    maxPersistance: 0.78
+    maxOctaves: 4
+    maxFrequency: 0.46
   - name: Oddity
     WaterColor: {fileID: 2100000, guid: b207b83e710a0924980de0ecf62dcd00, type: 2}
     TerrainColor: {r: 0, g: 1, b: 0.64271903, a: 0}
@@ -215,6 +219,10 @@ MonoBehaviour:
     - {fileID: 100000, guid: 2d1af115aa3f9d043883e4a240e0b89e, type: 3}
     Flowers: []
     GenerateWater: 1
+    maxLacunarity: 4
+    maxPersistance: 0.991
+    maxOctaves: 6
+    maxFrequency: 0.7
   - name: Hell
     WaterColor: {fileID: 2100000, guid: 0b5682e526205ad4b9aae049362e810c, type: 2}
     TerrainColor: {r: 0.5188679, g: 0, b: 0, a: 0}
@@ -228,6 +236,10 @@ MonoBehaviour:
     - {fileID: 100000, guid: c1141a4412e0c2748a68ba205e3c605d, type: 3}
     Flowers: []
     GenerateWater: 1
+    maxLacunarity: 1
+    maxPersistance: 0.502
+    maxOctaves: 16
+    maxFrequency: 1
   - name: Desert
     WaterColor: {fileID: 0}
     TerrainColor: {r: 0.8773585, g: 0.79271615, b: 0.3517711, a: 0}
@@ -240,6 +252,18 @@ MonoBehaviour:
     - {fileID: 100000, guid: b87c68b1737b07e4f8bcbfb9dfec295f, type: 3}
     Flowers: []
     GenerateWater: 0
+    maxLacunarity: 0
+    maxPersistance: 0
+    maxOctaves: 0
+    maxFrequency: 0
   treesCount: 300
   rockCount: 100
   flowerCount: 200
+  canvas: {fileID: 0}
+  _txtClimate: {fileID: 0}
+  _txtLacunarity: {fileID: 0}
+  _txtPersistence: {fileID: 0}
+  _txtOctaves: {fileID: 0}
+  _txtFrequency: {fileID: 0}
+  _txtAstroids: {fileID: 0}
+  _ToggleUI: {fileID: 0}

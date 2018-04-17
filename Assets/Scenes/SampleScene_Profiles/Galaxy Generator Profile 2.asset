@@ -14,6 +14,7 @@ MonoBehaviour:
   settings:
   - {fileID: 114943617592509954}
   - {fileID: 114471030878278438}
+  - {fileID: 114937385563151134}
 --- !u!114 &114471030878278438
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -31,19 +32,19 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 17.43
+    value: 31.8
   threshold:
     overrideState: 1
-    value: 0.8
+    value: 1.17
   softKnee:
     overrideState: 0
-    value: 0.5
+    value: 0.58
   diffusion:
-    overrideState: 0
-    value: 7
+    overrideState: 1
+    value: 7.61
   anamorphicRatio:
-    overrideState: 0
-    value: 0
+    overrideState: 1
+    value: 1
   color:
     overrideState: 0
     value: {r: 1, g: 1, b: 1, a: 1}
@@ -54,6 +55,30 @@ MonoBehaviour:
     overrideState: 0
     value: {fileID: 0}
   dirtIntensity:
+    overrideState: 0
+    value: 0
+--- !u!114 &114937385563151134
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6050e2d5de785ce4d931e4dbdbf2d755, type: 3}
+  m_Name: ChromaticAberration
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  spectralLut:
+    overrideState: 0
+    value: {fileID: 0}
+  intensity:
+    overrideState: 1
+    value: 0.076
+  fastMode:
     overrideState: 0
     value: 0
 --- !u!114 &114943617592509954
