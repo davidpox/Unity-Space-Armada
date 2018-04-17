@@ -47,7 +47,6 @@ public class BossStarGenerator : MonoBehaviour {
 
         int c = Mathf.FloorToInt(Random.Range(0, 4));                                                                               // Select a random climate.
         selectedClimate = climates[c];
-        selectedClimate = climates[2];
 
         yaw = Random.Range(-20.0f, 20.0f);                                                                                          // Random angle for astroid belt
         pitch = Random.Range(-20.0f, 20.0f);
@@ -80,7 +79,7 @@ public class BossStarGenerator : MonoBehaviour {
 
         perlin.Seed = (int)System.DateTime.Now.Ticks;
 
-        //perlin.Lacunarity = selectedClimate.maxLacunarity;
+        perlin.Lacunarity = selectedClimate.maxLacunarity;
         perlin.Persistence = selectedClimate.maxPersistance;
         perlin.OctaveCount = selectedClimate.maxOctaves;
         perlin.Frequency = selectedClimate.maxFrequency;

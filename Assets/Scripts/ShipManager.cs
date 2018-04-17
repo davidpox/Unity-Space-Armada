@@ -15,9 +15,9 @@ public class ShipManager : MonoBehaviour {
     public GameObject turret1;
     public GameObject turret2;
     public GameObject missiles;
-    public Transform[] path;
-    public Transform[] circlePath;
-    
+    public Transform[] pathF;
+    public Transform[] pathE;
+
     private GameObject friendlyFleet;
     private GameObject enemyFleet;
     private GameObject test;
@@ -32,8 +32,8 @@ public class ShipManager : MonoBehaviour {
 
         int z = 0;
         int x = 0;
-        for (int i = 0; i < 9; i++) {
-            if (i % 3 == 0) { z += 10; x = 0; }
+        for (int i = 0; i < 9; i++) {           // Spawns the ships at an offset. 
+            if (i % 3 == 0 ) { z += 10; x = 0; }
             GameObject ship = GenerateShip(new Vector3(300, 20, 300) + new Vector3(x + Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), z + Random.Range(-3.0f, 3.0f)));
             ship.transform.parent = friendlyFleet.transform;
             GameObject ship2 = GenerateShip(new Vector3(-300, 20, -300) + new Vector3(x + Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), z + Random.Range(-3.0f, 3.0f)));
@@ -42,14 +42,10 @@ public class ShipManager : MonoBehaviour {
             x += 10;
         }
 
+
         //testParent = new GameObject("testParent");
         //testParent.transform.position = new Vector3(50, 0, 50);
 
-        test = GenerateShip(new Vector3(50, 0, 200));
-        test.AddComponent<Orbit>();
-        test.GetComponent<Orbit>().orbitTarget = GameObject.Find("PlanetLand").transform;
-        test.GetComponent<Orbit>().distance = 70;
-        test.GetComponent<Orbit>().speed = 60;
 
         //test.transform.position = testParent.transform.position + (Vector3.back * 5);
         //test.transform.parent = testParent.transform;
@@ -57,20 +53,15 @@ public class ShipManager : MonoBehaviour {
 
         //SpaceChild.transform.position = SpaceParent.transform.position + Vector3.back * 10;
 
-        //GameObject cam = GameObject.FindGameObjectWithTag("MainCamera");
-        //cam.transform.parent = SpaceParent.transform;
-        //cam.transform.position = SpaceParent.transform.position + new Vector3(0.0f, 10.0f, -20.0f);
-        //cam.transform.LookAt(SpaceParent.transform);
+        GameObject cam = GameObject.FindGameObjectWithTag("MainCamera");
+        cam.transform.parent = friendlyFleet.transform;
+        cam.transform.position = friendlyFleet.transform.GetChild(4).position + new Vector3(0.0f, 5.0f, -10.0f);
+        cam.transform.LookAt(friendlyFleet.transform.GetChild(4));
 
 
-        //iTween.MoveTo(friendlyFleet, iTween.Hash("path", path, "speed", 30.0f, "orienttopath", true, "looktime", 0.6f, "easetype", iTween.EaseType.linear, "oncomplete", "activateCirclePath", "onCompleteTarget", GameObject.Find("Galaxy Generator")));
+        iTween.MoveTo(friendlyFleet, iTween.Hash("name", "friendlyPath", "path", pathF, "speed", 30.0f, "orienttopath", true, "looktime", 0.6f, "easetype", iTween.EaseType.linear, "oncomplete", "activateOrbitFriendly", "onCompleteTarget", GameObject.Find("Galaxy Generator")));
     }
 
-    void Update()
-    {
-        //test.transform.RotateAround(Vector3.zero, Vector3.up, 10.0f * Time.deltaTime);
-        //test.transform.LookAt(Vector3.zero, -test.transform.up);
-    }
 
     GameObject GenerateShip(Vector3 pos)
     {
@@ -184,30 +175,52 @@ public class ShipManager : MonoBehaviour {
 
 
         SpaceParentlocal.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-
-        generateSpaceShipPath();
         //SpaceParentlocal.transform.position = path[0].position;
 
         SpaceParentlocal.transform.position = pos;
         return SpaceParentlocal;
     }
 
-    void generateSpaceShipPath()
+    void activateOrbitFriendly()
     {
-        for(int i = 0; i < circlePath.Length; i++)
+        print("Completed Friendly Path");
+
+        GameObject cam = GameObject.FindGameObjectWithTag("MainCamera");
+        cam.transform.parent = enemyFleet.transform;
+        cam.transform.position = enemyFleet.transform.GetChild(4).position + new Vector3(0.0f, 5.0f, -10.0f);
+        cam.transform.LookAt(enemyFleet.transform.GetChild(4));
+
+
+
+        iTween.StopByName("friendlyPath");
+        foreach (Transform _ship in friendlyFleet.transform)
         {
-            circlePath[i].position += new Vector3(Random.Range(-5.0f, 5.0f), Random.Range(-5.0f, 5.0f), Random.Range(-5.0f, 5.0f));
+            if (_ship.gameObject.tag == "MainCamera") break;
+            _ship.gameObject.AddComponent<Orbit>();
+            _ship.gameObject.GetComponent<Orbit>().orbitTarget = GameObject.Find("PlanetLand").transform;
+            _ship.gameObject.GetComponent<Orbit>().distance = Vector3.Distance(Vector3.zero, _ship.transform.position);
+            _ship.gameObject.GetComponent<Orbit>().speed = Random.Range(40, 90);
         }
+        iTween.MoveTo(enemyFleet, iTween.Hash("name", "enemyPath", "path", pathE, "speed", 30.0f, "orienttopath", true, "looktime", 0.6f, "easetype", iTween.EaseType.linear, "oncomplete", "activateOrbitEnemy", "onCompleteTarget", GameObject.Find("Galaxy Generator")));
     }
 
-    void activateCirclePath()
+    void activateOrbitEnemy()
     {
-        //iTween.MoveTo(SpaceParent, iTween.Hash("path", circlePath, "speed", 10.0f, "orienttopath", true, "looktime", 0.6f, "easetype", iTween.EaseType.linear, "looptype", iTween.LoopType.loop));
+        print("Completed Enemy Path");
+        iTween.StopByName("enemyPath");
+        foreach (Transform _ship in enemyFleet.transform)
+        {
+            if (_ship.gameObject.tag == "MainCamera") break;
+            _ship.gameObject.AddComponent<Orbit>();
+            _ship.gameObject.GetComponent<Orbit>().orbitTarget = GameObject.Find("PlanetLand").transform;
+            _ship.gameObject.GetComponent<Orbit>().distance = Vector3.Distance(Vector3.zero, _ship.transform.position);
+            _ship.gameObject.GetComponent<Orbit>().speed = Random.Range(40, 90);
+        }
     }
 
     void OnDrawGizmos()
     {
-        //iTween.DrawPath(path);
-        //iTween.DrawPath(circlePath);
+        iTween.DrawPath(pathF);
+        iTween.DrawPath(pathE);
     }
 }
