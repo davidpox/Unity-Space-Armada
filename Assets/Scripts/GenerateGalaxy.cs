@@ -17,8 +17,11 @@ public class GenerateGalaxy : MonoBehaviour {
     // Use this for initialization
     void Start () {
         friendlyGalaxy = spawnStarsSpiral("Galaxy friendly");
-        friendlyGalaxy.transform.position = new Vector3(300.0f, 0.0f, 300.0f);
+        friendlyGalaxy.transform.position = new Vector3(400.0f, 0.0f, 400.0f);
         friendlyStarfield = friendlyGalaxy.transform.GetChild(0).gameObject;
+        friendlyGalaxy.transform.localScale = new Vector3(3.0f, 3.0f, 3.0f);
+        friendlyGalaxy.transform.rotation = Quaternion.Euler(10, 45, 0);
+
         Light friendlyLight = friendlyGalaxy.AddComponent<Light>();
         friendlyLight.type = LightType.Directional;
         friendlyLight.intensity = 0.65f;
@@ -27,10 +30,13 @@ public class GenerateGalaxy : MonoBehaviour {
         enemyGalaxy = spawnStarsSpiral("Galaxy enemy");
         enemyGalaxy.transform.position = new Vector3(-300.0f, 0.0f, -300.0f);
         enemyStarfield = enemyGalaxy.transform.GetChild(0).gameObject;
+        enemyGalaxy.transform.localScale = new Vector3(3.0f, 3.0f, 3.0f);
+        enemyGalaxy.transform.rotation = Quaternion.Euler(10, 45, 0);
+
         Light enemyLight = enemyGalaxy.AddComponent<Light>();
         enemyLight.type = LightType.Directional;
         enemyLight.intensity = 0.65f;
-        enemyLight.transform.rotation = new Quaternion(0.0f, 0.383f, 0.0f, 0.924f);  // 0.0f, 0.383f, 0.0f, 0.924f
+        enemyLight.transform.rotation = new Quaternion(0.0f, 0.383f, 0.0f, 0.924f);  
     }
 
     GameObject spawnStarsSpiral(string GalaxyName)
@@ -77,6 +83,15 @@ public class GenerateGalaxy : MonoBehaviour {
     {
         enemyStarfield.transform.Rotate(transform.up, 1.0f * Time.deltaTime);
         friendlyStarfield.transform.Rotate(transform.up, 1.0f * Time.deltaTime);
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            Time.timeScale -= 0.1f;
+        }
+        if (Input.GetButtonDown("Fire2"))
+        {
+            Time.timeScale += 0.1f;
+        }
     }
 
 }

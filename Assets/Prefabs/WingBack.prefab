@@ -51,6 +51,7 @@ GameObject:
   - component: {fileID: 4212347491459652}
   - component: {fileID: 33234611175722110}
   - component: {fileID: 23441214796425860}
+  - component: {fileID: 64791867793189592}
   m_Layer: 0
   m_Name: Wing Back
   m_TagString: Untagged
@@ -91,7 +92,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1495480365234510}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 12.917946, y: -3.3745003, z: 5.905657}
+  m_LocalPosition: {x: -5.301261, y: 0.24667692, z: 9.244673}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4212347491459652}
@@ -140,4 +141,18 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1952370230769614}
+  m_Mesh: {fileID: 4300000, guid: 0bab409af8dd7cd4e918546889934632, type: 3}
+--- !u!64 &64791867793189592
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1952370230769614}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: 0bab409af8dd7cd4e918546889934632, type: 3}

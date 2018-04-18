@@ -18,6 +18,10 @@ public class ShipManager : MonoBehaviour {
     public Transform[] pathF;
     public Transform[] pathE;
 
+    public Material enemyColor;
+    public Material enemyThruster;
+    public Material enemyOrange;
+
     private GameObject friendlyFleet;
     private GameObject enemyFleet;
     private GameObject test;
@@ -32,26 +36,29 @@ public class ShipManager : MonoBehaviour {
 
         int z = 0;
         int x = 0;
-        for (int i = 0; i < 9; i++) {           // Spawns the ships at an offset. 
-            if (i % 3 == 0 ) { z += 10; x = 0; }
+        for (int i = 0; i < 9; i++)     // Spawns the ships at an offset. 
+        {            
+            if (i % 3 == 0) { z += 10; x = 0; }
+
             GameObject ship = GenerateShip(new Vector3(300, 20, 300) + new Vector3(x + Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), z + Random.Range(-3.0f, 3.0f)));
             ship.transform.parent = friendlyFleet.transform;
-            GameObject ship2 = GenerateShip(new Vector3(-300, 20, -300) + new Vector3(x + Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), z + Random.Range(-3.0f, 3.0f)));
+            BoxCollider bc1 = ship.AddComponent<BoxCollider>();
+            bc1.size = new Vector3(100.0f, 100.0f, 100.0f);
+            bc1.isTrigger = true;
+            ship.tag = "friendly";
+
+
+            GameObject ship2 = GenerateShip(new Vector3(-300, 20, -300) + new Vector3(x + Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), z + Random.Range(-3.0f, 3.0f)), true);
             ship2.transform.parent = enemyFleet.transform;
+            BoxCollider bc2 = ship2.AddComponent<BoxCollider>();
+            bc2.size = new Vector3(100.0f, 100.0f, 100.0f);
+            bc2.isTrigger = true;
+            ship2.tag = "enemy";
+
+
 
             x += 10;
         }
-
-
-        //testParent = new GameObject("testParent");
-        //testParent.transform.position = new Vector3(50, 0, 50);
-
-
-        //test.transform.position = testParent.transform.position + (Vector3.back * 5);
-        //test.transform.parent = testParent.transform;
-
-
-        //SpaceChild.transform.position = SpaceParent.transform.position + Vector3.back * 10;
 
         GameObject cam = GameObject.FindGameObjectWithTag("MainCamera");
         cam.transform.parent = friendlyFleet.transform;
@@ -63,7 +70,7 @@ public class ShipManager : MonoBehaviour {
     }
 
 
-    GameObject GenerateShip(Vector3 pos)
+    GameObject GenerateShip(Vector3 pos, bool enemy = false)
     {
         List<GameObject> visors = new List<GameObject>();
         visors.Add(visor1);
@@ -87,13 +94,18 @@ public class ShipManager : MonoBehaviour {
 
 
         GameObject SpaceParentlocal = new GameObject("Spacecraft");
-
-        //Rigidbody rb = SpaceParentlocal.AddComponent<Rigidbody>();
-        //rb.useGravity = false;
+        if (enemy) SpaceParentlocal.name = "SpacecraftENEMY";
 
         GameObject spawnedShip = Instantiate(ship, transform);
         spawnedShip.transform.parent = SpaceParentlocal.transform;
-        //spawnedShip.transform.parent = GameObject.FindGameObjectWithTag("Player").transform;
+        if (enemy)
+        {
+            spawnedShip.transform.GetChild(5).GetComponent<TrailRenderer>().material = enemyThruster;
+            Material[] mats = spawnedShip.GetComponentInChildren<MeshRenderer>().materials;
+            mats[1] = enemyOrange;
+            spawnedShip.GetComponentInChildren<MeshRenderer>().materials = mats;
+        }
+        
         Vector3 visorPos = spawnedShip.transform.GetChild(0).transform.position;
         Vector3 rightWingPos = spawnedShip.transform.GetChild(1).transform.position;
         Vector3 leftWingPos = spawnedShip.transform.GetChild(2).transform.position;
@@ -139,6 +151,18 @@ public class ShipManager : MonoBehaviour {
                 GameObject thruster2 = Instantiate(thrusters[thrusterSet], spawnedWingRight.transform.GetChild(i + 1).transform.position, thrusters[thrusterSet].transform.rotation);        // and right wing
                 thruster2.transform.parent = spawnedWingRight.transform;
 
+                if (enemy)
+                {
+                    thruster.GetComponentInChildren<TrailRenderer>().material = enemyThruster;
+                    Material[] mats = thruster.GetComponentInChildren<MeshRenderer>().materials;
+                    mats[2] = enemyOrange;
+                    thruster.GetComponentInChildren<MeshRenderer>().materials = mats;
+
+                    thruster2.GetComponentInChildren<TrailRenderer>().material = enemyThruster;
+                    thruster2.GetComponentInChildren<MeshRenderer>().materials[2] = enemyOrange;
+                    thruster2.GetComponentInChildren<MeshRenderer>().materials = mats;
+                }
+
                 attachmentslots--;                                                                                                                                  // remove an attachment slot for the weapons
                 usedSlots++;                                                    // & say we've used a slot (could probably derive this from the attachmentSlots)
             }
@@ -146,9 +170,11 @@ public class ShipManager : MonoBehaviour {
             {
                 GameObject weapon = Instantiate(weapons[weaponSet], spawnedWingLeft.transform.GetChild(usedSlots + 1).transform.position, weapons[weaponSet].transform.rotation);       // spawn a weapon on left wing
                 weapon.transform.parent = spawnedWingLeft.transform;
+                weapon.tag = "turret";
 
                 GameObject weapon2 = Instantiate(weapons[weaponSet], spawnedWingRight.transform.GetChild(usedSlots + 1).transform.position, weapons[weaponSet].transform.rotation);     // and right wing
                 weapon2.transform.parent = spawnedWingRight.transform;
+                weapon.tag = "turret";
 
                 usedSlots++;
             }
@@ -170,6 +196,18 @@ public class ShipManager : MonoBehaviour {
             GameObject thruster2 = Instantiate(thrusters[thrusterSet], spawnedWingRight.transform.GetChild(1).transform.position, thrusters[thrusterSet].transform.rotation);
             thruster2.transform.parent = spawnedWingRight.transform;
             thruster2.transform.Rotate(Vector3.left, -90.0f);
+
+            if (enemy)
+            {
+                thruster1.GetComponentInChildren<TrailRenderer>().material = enemyThruster;
+                Material[] mats = thruster1.GetComponentInChildren<MeshRenderer>().materials;
+                mats[2] = enemyOrange;
+                thruster1.GetComponentInChildren<MeshRenderer>().materials = mats;
+
+                thruster2.GetComponentInChildren<TrailRenderer>().material = enemyThruster;
+                thruster2.GetComponentInChildren<MeshRenderer>().materials[2] = enemyOrange;
+                thruster2.GetComponentInChildren<MeshRenderer>().materials = mats;
+            }
         }
 
 
@@ -189,9 +227,7 @@ public class ShipManager : MonoBehaviour {
         cam.transform.parent = enemyFleet.transform;
         cam.transform.position = enemyFleet.transform.GetChild(4).position + new Vector3(0.0f, 5.0f, -10.0f);
         cam.transform.LookAt(enemyFleet.transform.GetChild(4));
-
-
-
+        
         iTween.StopByName("friendlyPath");
         foreach (Transform _ship in friendlyFleet.transform)
         {
@@ -218,7 +254,7 @@ public class ShipManager : MonoBehaviour {
         }
     }
 
-    void OnDrawGizmos()
+    void OnDrawGizmosSelected()
     {
         iTween.DrawPath(pathF);
         iTween.DrawPath(pathE);

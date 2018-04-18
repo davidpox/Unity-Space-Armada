@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4910791731792174}
   - component: {fileID: 33539014309182782}
   - component: {fileID: 23024548179613914}
+  - component: {fileID: 65988102181402906}
   m_Layer: 0
   m_Name: Missile Array
   m_TagString: Untagged
@@ -38,7 +39,7 @@ GameObject:
   - component: {fileID: 4006734635528462}
   m_Layer: 0
   m_Name: MissileArray
-  m_TagString: Untagged
+  m_TagString: turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -50,7 +51,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1306425723655064}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 287.89267, y: 24.487076, z: 20.713552}
+  m_LocalPosition: {x: 2.018498, y: 0.894, z: 4.1184564}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4910791731792174}
@@ -112,3 +113,15 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1198571776788828}
   m_Mesh: {fileID: 4300000, guid: 8edf51c547a82c947a946f5bc124791e, type: 3}
+--- !u!65 &65988102181402906
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1198571776788828}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.03847384, y: 0.04024889, z: 0.020000001}
+  m_Center: {x: -0.0000000018626451, y: 0.000000007450581, z: -0.0000000037252903}

@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4320001392933972}
   - component: {fileID: 33571465113824482}
   - component: {fileID: 23008128827576826}
+  - component: {fileID: 64733888995547846}
   m_Layer: 0
   m_Name: Thruster Short
   m_TagString: Untagged
@@ -79,7 +80,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1889858575402514}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 82.4, y: 56.03165, z: -93.7}
+  m_LocalPosition: {x: -2.3778985, y: -1.6743593, z: 6.9467993}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4320001392933972}
@@ -144,6 +145,20 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1516235463964188}
   m_Mesh: {fileID: 4300000, guid: a969aa69ffb94c34483673773e3691ba, type: 3}
+--- !u!64 &64733888995547846
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1516235463964188}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300000, guid: a969aa69ffb94c34483673773e3691ba, type: 3}
 --- !u!96 &96423143814168592
 TrailRenderer:
   serializedVersion: 2
@@ -183,7 +198,7 @@ TrailRenderer:
   m_Time: 0.2
   m_Parameters:
     serializedVersion: 2
-    widthMultiplier: 1.5
+    widthMultiplier: 0.45
     widthCurve:
       serializedVersion: 2
       m_Curve:

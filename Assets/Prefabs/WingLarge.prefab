@@ -36,6 +36,7 @@ GameObject:
   - component: {fileID: 4755674200650836}
   - component: {fileID: 33052020173843898}
   - component: {fileID: 23293823059977694}
+  - component: {fileID: 64655180454027136}
   m_Layer: 0
   m_Name: Wing Large
   m_TagString: Untagged
@@ -95,7 +96,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1791626552980464}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -4.9362254, y: -0.78930426, z: 8.867912}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4755674200650836}
@@ -198,4 +199,18 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1256022657879566}
+  m_Mesh: {fileID: 4300000, guid: ba1e9e2c27a627c4aa82beaac1a38b4e, type: 3}
+--- !u!64 &64655180454027136
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1256022657879566}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: ba1e9e2c27a627c4aa82beaac1a38b4e, type: 3}

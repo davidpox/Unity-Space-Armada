@@ -21,7 +21,6 @@ public class BossStarGenerator : MonoBehaviour {
     private GameObject astroid;
     private GameObject AstroidParent;
     private bool shouldSpawnAstroids;
-    private float yaw, pitch, roll;
     private Perlin perlin;
     private int astroidCount;
 
@@ -48,10 +47,6 @@ public class BossStarGenerator : MonoBehaviour {
         int c = Mathf.FloorToInt(Random.Range(0, 4));                                                                               // Select a random climate.
         selectedClimate = climates[c];
 
-        yaw = Random.Range(-20.0f, 20.0f);                                                                                          // Random angle for astroid belt
-        pitch = Random.Range(-20.0f, 20.0f);
-        roll = Random.Range(-20.0f, 20.0f);
-
         astroidCount = Random.Range(100, 500);
 
         if (Random.Range(0.0f, 1.0f) > 0.5f) { spawnAstroidBelt(astroidCount, 100, 140, gameObject.transform.position); shouldSpawnAstroids = true; }                    // Should we spawn an astroid belt? 50% chance. 
@@ -73,8 +68,6 @@ public class BossStarGenerator : MonoBehaviour {
 
         Vector3[] verts = mesh.vertices;
 
-        Vector3 _displacement = Random.Range(-10, 10) * Vector3.one;
-
         perlin = new Perlin();
 
         perlin.Seed = (int)System.DateTime.Now.Ticks;
@@ -86,9 +79,9 @@ public class BossStarGenerator : MonoBehaviour {
         
         for (int i = 0; i < verts.Length; i++)
         {
-            verts[i].x += (float)perlin.GetValue(verts[i] + _displacement) * 0.2f;        //(Perlin.Fbm(verts[i], 2) * 0.6f);
-            verts[i].y += (float)perlin.GetValue(verts[i] + _displacement) * 0.2f;        //(Perlin.Fbm(verts[i], 2) * 0.6f);
-            verts[i].z += (float)perlin.GetValue(verts[i] + _displacement) * 0.2f;        //(Perlin.Fbm(verts[i], 2) * 0.6f);
+            verts[i].x += (float)perlin.GetValue(verts[i]) * 0.2f;        //(Perlin.Fbm(verts[i], 2) * 0.6f);
+            verts[i].y += (float)perlin.GetValue(verts[i]) * 0.2f;        //(Perlin.Fbm(verts[i], 2) * 0.6f);
+            verts[i].z += (float)perlin.GetValue(verts[i]) * 0.2f;        //(Perlin.Fbm(verts[i], 2) * 0.6f);
         }
         mesh.vertices = verts;
         mesh.RecalculateBounds();
@@ -237,11 +230,28 @@ public class BossStarGenerator : MonoBehaviour {
     void spawnAstroidBelt(int numStars, float distanceMin, float distanceMax, Vector3 pos)
     {
         AstroidParent = new GameObject("AstroidParent");
-        ReMakeAstroid();
+
+        perlin = new Perlin();
+
+        perlin.Seed = (int)System.DateTime.Now.Ticks;
 
         for (int i = 0; i < numStars; i++)
         {
-            ReMakeAstroid();
+            GameObject astroid = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            astroid.name = "Astroid";
+            mesh = astroid.GetComponent<MeshFilter>().mesh;
+            astroid.transform.parent = AstroidParent.transform;
+
+            Vector3[] verts = mesh.vertices;
+            for (int j = 0; j < verts.Length; j++)
+            {
+                verts[j].x += (float)perlin.GetValue(verts[j]) * 0.3f;
+                verts[j].y += (float)perlin.GetValue(verts[j]) * 0.3f;
+                verts[j].z += (float)perlin.GetValue(verts[j]) * 0.3f;
+            }
+            mesh.vertices = verts;
+            mesh.RecalculateBounds();
+
             float angle = Random.Range(0.0f, 360.0f);
             float distance = Random.Range(distanceMin, distanceMax);
             float x = (Mathf.Cos(angle * Mathf.Deg2Rad) * distance) * Random.Range(1.0f, 1.6f);
@@ -249,33 +259,17 @@ public class BossStarGenerator : MonoBehaviour {
             float y = Random.Range(-10.0f, 10.0f);
             float scale = Random.Range(0.8f, 3.0f);
 
-            GameObject iAstroid = Instantiate(astroid, pos + new Vector3(x, y, z), new Quaternion());
-            iAstroid.transform.Rotate(new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360)));
-            iAstroid.transform.localScale = new Vector3(scale, scale, scale);
-            iAstroid.transform.parent = AstroidParent.transform;
-            MeshRenderer renderer = iAstroid.GetComponent<MeshRenderer>();
+            astroid.transform.position = pos + new Vector3(x, y, z);
+            astroid.transform.rotation = Random.rotation;
+
+            astroid.transform.localScale = new Vector3(scale, scale, scale);
+            astroid.transform.parent = AstroidParent.transform;
+            MeshRenderer renderer = astroid.GetComponent<MeshRenderer>();
             renderer.material = AstroidMaterial;
             renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         }
-        AstroidParent.transform.Rotate(new Vector3(yaw, pitch, roll));
-    }
 
-    void ReMakeAstroid()
-    {
-        astroid = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        astroid.name = "Astroid";
-        astroid.transform.parent = AstroidParent.transform;
-        Mesh mesh = astroid.GetComponent<MeshFilter>().mesh;
-
-        Vector3[] verts = mesh.vertices;
-        for (int i = 0; i < verts.Length; i++)
-        {
-            verts[i].x += (KeijiroPerlin.Noise(verts[i].normalized) * 0.3f);
-            verts[i].y += (KeijiroPerlin.Noise(verts[i].normalized) * 0.3f);
-            verts[i].z += (KeijiroPerlin.Noise(verts[i].normalized) * 0.3f);
-        }
-        mesh.vertices = verts;
-        mesh.RecalculateBounds();
+        AstroidParent.transform.rotation = Random.rotation;
     }
 
     public GameObject canvas;

@@ -112,6 +112,7 @@ GameObject:
   - component: {fileID: 4129796945124086}
   - component: {fileID: 33259246529547578}
   - component: {fileID: 23948880864808818}
+  - component: {fileID: 64505497550994484}
   m_Layer: 0
   m_Name: SpaceshipBody
   m_TagString: Untagged
@@ -126,7 +127,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1895060692416394}
   m_LocalRotation: {x: -0.5, y: -0.5, z: -0.5, w: 0.5}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -7.1817203, y: 0.28066206, z: 10.109038}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children:
   - {fileID: 4988559326816968}
@@ -259,6 +260,20 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1895060692416394}
   m_Mesh: {fileID: 4300000, guid: 94c1bc665d7cfcf44833667f67b4d6ca, type: 3}
+--- !u!64 &64505497550994484
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1895060692416394}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300000, guid: 94c1bc665d7cfcf44833667f67b4d6ca, type: 3}
 --- !u!96 &96331747113640182
 TrailRenderer:
   serializedVersion: 2
@@ -298,7 +313,7 @@ TrailRenderer:
   m_Time: 0.4
   m_Parameters:
     serializedVersion: 2
-    widthMultiplier: 0.5
+    widthMultiplier: 0.15
     widthCurve:
       serializedVersion: 2
       m_Curve:
