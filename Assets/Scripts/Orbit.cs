@@ -16,6 +16,8 @@ public class Orbit : MonoBehaviour
     private List<GameObject> turrets;
     private Hashtable bullets;
     private float shotTimer;
+    private float speedtimer;
+    private float searchRadius;
 
     private void Start()
     {
@@ -24,7 +26,9 @@ public class Orbit : MonoBehaviour
         transform.localPosition = Vector3.zero;
         transform.rotation = _pivot.rotation;
         shotTimer = 0.0f;
+        speedtimer = 0.0f;
         health = 100;
+        searchRadius = 20.0f;
 
         InitializePivot();
 
@@ -76,16 +80,24 @@ public class Orbit : MonoBehaviour
         if (health > 0)
         {
             shotTimer += Time.deltaTime;
+            speedtimer += Time.deltaTime;
 
-            foundItems = Physics.OverlapSphere(transform.position, 20.0f);
-            foreach (Collider coll in foundItems)
+            if(speedtimer >= 10.0f)
             {
-                if (coll.transform.IsChildOf(gameObject.transform)) break;
+                speed = Random.Range(20, 80);
+                searchRadius *= 1.2f;
+                print(searchRadius);
+            }
 
-                if ((gameObject.tag == "friendly" && coll.gameObject.tag == "enemy") ||
-                   (gameObject.tag == "enemy" && coll.gameObject.tag == "friendly"))
+            if (shotTimer >= 1.0f)
+            {
+                foundItems = Physics.OverlapSphere(transform.position, searchRadius);
+                foreach (Collider coll in foundItems)
                 {
-                    if (shotTimer >= 1.0f)
+                    if (coll.transform.IsChildOf(gameObject.transform)) break;
+
+                    if ((gameObject.tag == "friendly" && coll.gameObject.tag == "enemy") ||
+                       (gameObject.tag == "enemy" && coll.gameObject.tag == "friendly"))
                     {
                         foreach (GameObject turret in turrets)
                         {
@@ -95,7 +107,7 @@ public class Orbit : MonoBehaviour
                                 coll.transform.position.z
                                 ), gameObject.transform.up);
                             var b = Instantiate(bullet, turret.transform.position + Vector3.forward + new Vector3(0.0f, 0.1401f, 1.192f), bullet.transform.rotation);
-                            b.GetComponent<bulletScript>().target = coll.gameObject;
+                            b.transform.GetChild(0).GetComponent<bulletScript>().target = coll.gameObject;
 
                             shotTimer = 0.0f;
                         }
@@ -104,7 +116,7 @@ public class Orbit : MonoBehaviour
             }
         }
         else
-        {
+        {           // If the ship has died, move towards the center. 
             gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, Vector3.zero, Time.deltaTime * 5);
             if(gameObject.transform.position == Vector3.zero)
             {
@@ -112,8 +124,13 @@ public class Orbit : MonoBehaviour
             }
         }
     }
+
+    void OnCollisionEnter(Collision coll)
+    {
+        print("Collided with " + coll.gameObject.tag);
+    }
     
-    void OnDrawGizmosSelected()
+    void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, 10.0f);

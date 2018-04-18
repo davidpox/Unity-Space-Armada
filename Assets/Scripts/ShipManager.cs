@@ -96,7 +96,7 @@ public class ShipManager : MonoBehaviour {
         GameObject SpaceParentlocal = new GameObject("Spacecraft");
         if (enemy) SpaceParentlocal.name = "SpacecraftENEMY";
 
-        GameObject spawnedShip = Instantiate(ship, transform);
+        GameObject spawnedShip = Instantiate(ship, SpaceParentlocal.transform);
         spawnedShip.transform.parent = SpaceParentlocal.transform;
         if (enemy)
         {
@@ -216,6 +216,7 @@ public class ShipManager : MonoBehaviour {
         //SpaceParentlocal.transform.position = path[0].position;
 
         SpaceParentlocal.transform.position = pos;
+        ship.transform.position = Vector3.zero;
         return SpaceParentlocal;
     }
 

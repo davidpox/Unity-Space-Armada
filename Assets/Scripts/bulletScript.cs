@@ -15,12 +15,12 @@ public class bulletScript : MonoBehaviour {
     void Update()
     {
         if (!target) return; 
-        transform.LookAt(target.transform);
-        transform.Translate(Vector3.forward * 120.0f * Time.deltaTime);
+        transform.parent.transform.LookAt(target.transform);
+        transform.parent.transform.Translate(Vector3.forward * 120.0f * Time.deltaTime);
     }
 
 	void kill () {
-        Destroy(gameObject);
+        Destroy(transform.parent.gameObject);
 	}
 
     void OnCollisionEnter(Collision coll)

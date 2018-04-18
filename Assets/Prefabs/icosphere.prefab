@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 114148404503542432}
   m_Layer: 0
   m_Name: icosphere
-  m_TagString: Untagged
+  m_TagString: planet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -202,7 +202,7 @@ MonoBehaviour:
     - {fileID: 100000, guid: 1fafca4acc3ca5a479710b41d43a6692, type: 3}
     - {fileID: 100000, guid: fd3e3158567e4b14c982b94e93ac814b, type: 3}
     GenerateWater: 1
-    maxLacunarity: 10
+    maxLacunarity: 2
     maxPersistance: 0.78
     maxOctaves: 4
     maxFrequency: 0.46
@@ -219,10 +219,10 @@ MonoBehaviour:
     - {fileID: 100000, guid: 2d1af115aa3f9d043883e4a240e0b89e, type: 3}
     Flowers: []
     GenerateWater: 1
-    maxLacunarity: 4
-    maxPersistance: 0.991
-    maxOctaves: 6
-    maxFrequency: 0.7
+    maxLacunarity: 2
+    maxPersistance: 0.773
+    maxOctaves: 3
+    maxFrequency: 0.4
   - name: Hell
     WaterColor: {fileID: 2100000, guid: 0b5682e526205ad4b9aae049362e810c, type: 2}
     TerrainColor: {r: 0.5188679, g: 0, b: 0, a: 0}
@@ -252,10 +252,10 @@ MonoBehaviour:
     - {fileID: 100000, guid: b87c68b1737b07e4f8bcbfb9dfec295f, type: 3}
     Flowers: []
     GenerateWater: 0
-    maxLacunarity: 0
-    maxPersistance: 0
-    maxOctaves: 0
-    maxFrequency: 0
+    maxLacunarity: 1
+    maxPersistance: 0.168
+    maxOctaves: 1
+    maxFrequency: 1
   treesCount: 300
   rockCount: 100
   flowerCount: 200
