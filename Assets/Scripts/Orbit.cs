@@ -88,8 +88,10 @@ public class Orbit : MonoBehaviour
 
             if(speedtimer >= 10.0f)
             {
-                speed = Random.Range(20, 80);
-                searchRadius *= 1.05f;
+                speed = Random.Range(40, 90) * (health / 100) - (turrets.Count * 2);
+                if(speed < 10.0f) { speed = 10.0f; }
+                //speed = Mathf.Clamp(speed, 5.0f, 100.0f);           // ensures that the vehicle has at least a little bit of speed. 
+                searchRadius *= 1.05f;                              // increase vehicle visibility by 5% every 10 secs to ensure all ships are found after a while
                 speedtimer = 0.0f;
             }
 
