@@ -74,6 +74,13 @@ public class Orbit : MonoBehaviour
             _pivot.Rotate(Vector3.up, speed * Time.deltaTime, Space.Self);
         }
     }
+
+    private void OnDestroy()
+    {
+        GameObject cam = GameObject.Find("CameraTriggers");
+        GameObject thisCam = transform.Find("Body/Visor/Camera").gameObject;
+        cam.GetComponent<CameraManager>().AllSpaceShipCameras.Remove(thisCam);
+    }
     
     private void Update()
     {
@@ -85,8 +92,8 @@ public class Orbit : MonoBehaviour
             if(speedtimer >= 10.0f)
             {
                 speed = Random.Range(20, 80);
-                searchRadius *= 1.2f;
-                print(searchRadius);
+                searchRadius *= 1.05f;
+                speedtimer = 0.0f;
             }
 
             if (shotTimer >= 1.0f)
@@ -130,9 +137,9 @@ public class Orbit : MonoBehaviour
         print("Collided with " + coll.gameObject.tag);
     }
     
-    void OnDrawGizmos()
+    void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, 10.0f);
+        Gizmos.DrawWireSphere(transform.position, searchRadius);
     }
 }

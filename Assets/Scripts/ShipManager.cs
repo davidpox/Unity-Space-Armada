@@ -21,6 +21,7 @@ public class ShipManager : MonoBehaviour {
     public Material enemyColor;
     public Material enemyThruster;
     public Material enemyOrange;
+    public GameObject cameramanager;
 
     private GameObject friendlyFleet;
     private GameObject enemyFleet;
@@ -60,16 +61,20 @@ public class ShipManager : MonoBehaviour {
             x += 10;
         }
 
-        GameObject cam = GameObject.FindGameObjectWithTag("MainCamera");
-        cam.transform.parent = friendlyFleet.transform;
-        cam.transform.position = friendlyFleet.transform.GetChild(4).position + new Vector3(0.0f, 5.0f, -10.0f);
-        cam.transform.LookAt(friendlyFleet.transform.GetChild(4));
+        GameObject friendlycam = new GameObject("FriendlyFleetCamera");
+        friendlycam.SetActive(false);
+        friendlycam.transform.parent = friendlyFleet.transform;
+        friendlycam.transform.position = friendlyFleet.transform.GetChild(4).position + new Vector3(0.0f, 5.0f, -10.0f);
+        friendlycam.transform.LookAt(friendlyFleet.transform.GetChild(4));
+        cameramanager.GetComponent<CameraManager>().cameras.Add(friendlycam);
 
+
+        cameramanager.GetComponent<CameraManager>().activateSpaceShipCameras();
+        cameramanager.GetComponent<CameraManager>().FriendlyFleet = friendlyFleet.transform.GetChild(1).gameObject;
 
         iTween.MoveTo(friendlyFleet, iTween.Hash("name", "friendlyPath", "path", pathF, "speed", 30.0f, "orienttopath", true, "looktime", 0.6f, "easetype", iTween.EaseType.linear, "oncomplete", "activateOrbitFriendly", "onCompleteTarget", GameObject.Find("Galaxy Generator")));
     }
-
-
+    
     GameObject GenerateShip(Vector3 pos, bool enemy = false)
     {
         List<GameObject> visors = new List<GameObject>();
@@ -94,10 +99,10 @@ public class ShipManager : MonoBehaviour {
 
 
         GameObject SpaceParentlocal = new GameObject("Spacecraft");
-        if (enemy) SpaceParentlocal.name = "SpacecraftENEMY";
 
         GameObject spawnedShip = Instantiate(ship, SpaceParentlocal.transform);
         spawnedShip.transform.parent = SpaceParentlocal.transform;
+        spawnedShip.name = "Body";
         if (enemy)
         {
             spawnedShip.transform.GetChild(5).GetComponent<TrailRenderer>().material = enemyThruster;
@@ -118,6 +123,15 @@ public class ShipManager : MonoBehaviour {
 
         GameObject spawnedVisor = Instantiate(visors[Random.Range(0, 2)], visorPos, spawnedShip.transform.rotation);           // one of two visors (windshields)
         spawnedVisor.transform.parent = spawnedShip.transform;
+        spawnedVisor.name = "Visor";
+        if(!enemy)
+        {
+            cameramanager.GetComponent<CameraManager>().FriendlySpaceShipCameras.Add(spawnedVisor.transform.GetChild(1).gameObject);
+        } else
+        {
+            cameramanager.GetComponent<CameraManager>().AllSpaceShipCameras.Add(spawnedVisor.transform.GetChild(1).gameObject);
+        }
+
 
         if (!backThrusters)                                                                  // if we're using front thrusters, use one of two wing styles 
         {
@@ -224,11 +238,8 @@ public class ShipManager : MonoBehaviour {
     {
         print("Completed Friendly Path");
 
-        GameObject cam = GameObject.FindGameObjectWithTag("MainCamera");
-        cam.transform.parent = enemyFleet.transform;
-        cam.transform.position = enemyFleet.transform.GetChild(4).position + new Vector3(0.0f, 5.0f, -10.0f);
-        cam.transform.LookAt(enemyFleet.transform.GetChild(4));
-        
+        cameramanager.GetComponent<CameraManager>().SwitchCameras(cameramanager.GetComponent<CameraManager>().cameras[1]);
+
         iTween.StopByName("friendlyPath");
         foreach (Transform _ship in friendlyFleet.transform)
         {
@@ -245,6 +256,9 @@ public class ShipManager : MonoBehaviour {
     {
         print("Completed Enemy Path");
         iTween.StopByName("enemyPath");
+
+        cameramanager.GetComponent<CameraManager>().freecam = true;
+
         foreach (Transform _ship in enemyFleet.transform)
         {
             if (_ship.gameObject.tag == "MainCamera") break;
@@ -255,7 +269,7 @@ public class ShipManager : MonoBehaviour {
         }
     }
 
-    void OnDrawGizmosSelected()
+    void OnDrawGizmos()
     {
         iTween.DrawPath(pathF);
         iTween.DrawPath(pathE);
