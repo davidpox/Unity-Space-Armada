@@ -16,7 +16,6 @@ public class CameraManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        MainCamera.SetActive(true);
         cameraTimer = 0.0f;
         freecam = false;
 	}
@@ -56,6 +55,7 @@ public class CameraManager : MonoBehaviour {
         {
             int cam = Mathf.FloorToInt(Random.Range(0, AllSpaceShipCameras.Count));
             SwitchCameras(AllSpaceShipCameras[cam]);
+            
         }
         else
         {

@@ -9,7 +9,12 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: Cube.001_Cube.005
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: scorpion
+    second: {fileID: 2100000, guid: a293ced70fad312479fafe34bd7fc333, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
