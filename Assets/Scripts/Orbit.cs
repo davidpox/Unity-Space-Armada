@@ -18,6 +18,7 @@ public class Orbit : MonoBehaviour
     private float shotTimer;
     private float speedtimer;
     private float searchRadius;
+    private bool dead;
 
     private void Start()
     {
@@ -46,6 +47,8 @@ public class Orbit : MonoBehaviour
                 turrets.Add(child.gameObject);
             }
         }
+
+        transform.Find("Body/Visor/Particle").gameObject.SetActive(false);
     }
 
     private void InitializePivot()
@@ -75,12 +78,6 @@ public class Orbit : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
-    {
-        GameObject cam = GameObject.Find("CameraTriggers");
-        GameObject thisCam = transform.Find("Body/Visor/Camera").gameObject;
-        cam.GetComponent<CameraManager>().AllSpaceShipCameras.Remove(thisCam);
-    }
     
     private void Update()
     {
@@ -122,11 +119,16 @@ public class Orbit : MonoBehaviour
                 }
             }
         }
-        else
+        else if(!dead)
         {           // If the ship has died, move towards the center. 
             gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, Vector3.zero, Time.deltaTime * 5);
-            if(gameObject.transform.position == Vector3.zero)
+            if (gameObject.transform.position == Vector3.zero)
             {
+                dead = true;
+                GameObject cam = GameObject.Find("CameraTriggers");
+                GameObject thisCam = transform.Find("Body/Visor/Camera").gameObject;
+                cam.GetComponent<CameraManager>().AllSpaceShipCameras.Remove(thisCam);
+                cam.GetComponent<CameraManager>().randomCamera();
                 Destroy(_pivot.gameObject);
             }
         }

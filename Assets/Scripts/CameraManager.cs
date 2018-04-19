@@ -41,18 +41,18 @@ public class CameraManager : MonoBehaviour {
 
         if(cameras[1].activeInHierarchy)
         {
-            cameras[2].transform.LookAt(AllSpaceShipCameras[1].transform);
+            cameras[1].transform.LookAt(AllSpaceShipCameras[1].transform);
         }
-        if (cameras[0].activeInHierarchy)
+        if (cameras[0].activeInHierarchy) 
         {
             cameras[0].transform.LookAt(FriendlyFleet.transform);
         }
     }
 
-    void randomCamera()
+    public void randomCamera()
     {
 
-        if (Random.Range(0.0f, 1.0f) > 0.5f)
+        if (Random.Range(0.0f, 1.0f) > 0.85f)        // lower chance (25%) for spaceship cam because they're quite sickening, really. 
         {
             int cam = Mathf.FloorToInt(Random.Range(0, AllSpaceShipCameras.Count));
             SwitchCameras(AllSpaceShipCameras[cam]);
@@ -76,6 +76,7 @@ public class CameraManager : MonoBehaviour {
         }
         foreach (GameObject cam in FriendlySpaceShipCameras)
         {
+            if(!cam) { break; }
             cam.SetActive(false);
         }
         foreach (GameObject cam in AllSpaceShipCameras)
@@ -84,11 +85,6 @@ public class CameraManager : MonoBehaviour {
         }
 
         if (!(MainCamera == camera)) { MainCamera.SetActive(false); };
-
-        if(!camera)
-        {
-            print("Camera does not exist");
-        }
 
         camera.SetActive(true);
     }

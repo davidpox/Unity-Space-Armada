@@ -227,7 +227,6 @@ public class ShipManager : MonoBehaviour {
 
 
         SpaceParentlocal.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-        //SpaceParentlocal.transform.position = path[0].position;
 
         SpaceParentlocal.transform.position = pos;
         ship.transform.position = Vector3.zero;
@@ -258,6 +257,7 @@ public class ShipManager : MonoBehaviour {
         iTween.StopByName("enemyPath");
 
         cameramanager.GetComponent<CameraManager>().freecam = true;
+        cameramanager.GetComponent<CameraManager>().randomCamera();
 
         foreach (Transform _ship in enemyFleet.transform)
         {

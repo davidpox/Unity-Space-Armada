@@ -282,13 +282,15 @@ public class BossStarGenerator : MonoBehaviour {
 
     void ApplyUI()
     {
+        if(!canvas) { return; }
+
         _txtClimate.text = "• Climate: " + selectedClimate.name;
         _txtLacunarity.text  = "• Lacunarity: " + perlin.Lacunarity.ToString();
-        _txtPersistence.text  = "• Persistence: " + perlin.Persistence.ToString();
+        _txtPersistence.text  = "• Persistence: " + perlin.Persistence.ToString("F2");
         _txtOctaves.text  = "• Octaves: " + perlin.OctaveCount.ToString();
         _txtFrequency.text  = "• Frequency: " + perlin.Frequency.ToString();
 
-        if(shouldSpawnAstroids) { _txtAstroids.text = "• Astroids: Yes, " + astroidCount.ToString(); }
+        if(shouldSpawnAstroids) { _txtAstroids.text = "• Astroids: " + astroidCount.ToString(); }
     }
 
     public Toggle _ToggleUI;
