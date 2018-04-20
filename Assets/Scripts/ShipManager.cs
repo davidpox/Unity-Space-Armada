@@ -31,9 +31,9 @@ public class ShipManager : MonoBehaviour {
     void Start () {
 
         friendlyFleet = new GameObject("friendlyFleet");
-        friendlyFleet.transform.position = new Vector3(300, 20, 300);
+        friendlyFleet.transform.position = new Vector3(300, 0, 300);
         enemyFleet = new GameObject("enemyFleet");
-        enemyFleet.transform.position = new Vector3(-300, 20, -300);
+        enemyFleet.transform.position = new Vector3(-300, 0, -300);
 
         int z = 0;
         int x = 0;
@@ -41,7 +41,7 @@ public class ShipManager : MonoBehaviour {
         {            
             if (i % 3 == 0) { z += 10; x = 0; }
 
-            GameObject ship = GenerateShip(new Vector3(300, 20, 300) + new Vector3(x + Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), z + Random.Range(-3.0f, 3.0f)));
+            GameObject ship = GenerateShip(new Vector3(300, 0, 300) + new Vector3(x + Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), z + Random.Range(-3.0f, 3.0f)));
             ship.transform.parent = friendlyFleet.transform;
             BoxCollider bc1 = ship.AddComponent<BoxCollider>();
             bc1.size = new Vector3(100.0f, 100.0f, 100.0f);
@@ -49,7 +49,7 @@ public class ShipManager : MonoBehaviour {
             ship.tag = "friendly";
 
 
-            GameObject ship2 = GenerateShip(new Vector3(-300, 20, -300) + new Vector3(x + Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), z + Random.Range(-3.0f, 3.0f)), true);
+            GameObject ship2 = GenerateShip(new Vector3(-300, 0, -300) + new Vector3(x + Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), z + Random.Range(-3.0f, 3.0f)), true);
             ship2.transform.parent = enemyFleet.transform;
             BoxCollider bc2 = ship2.AddComponent<BoxCollider>();
             bc2.size = new Vector3(100.0f, 100.0f, 100.0f);
@@ -72,7 +72,7 @@ public class ShipManager : MonoBehaviour {
         cameramanager.GetComponent<CameraManager>().activateSpaceShipCameras();
         cameramanager.GetComponent<CameraManager>().FriendlyFleet = friendlyFleet.transform.GetChild(1).gameObject;
 
-        iTween.MoveTo(friendlyFleet, iTween.Hash("name", "friendlyPath", "path", pathF, "speed", 30.0f, "orienttopath", true, "looktime", 0.6f, "easetype", iTween.EaseType.linear, "oncomplete", "activateOrbitFriendly", "onCompleteTarget", GameObject.Find("Galaxy Generator")));
+        iTween.MoveTo(friendlyFleet, iTween.Hash("name", "friendlyPath", "path", pathF, "speed", 50.0f, "orienttopath", true, "looktime", 0.6f, "easetype", iTween.EaseType.linear, "oncomplete", "activateOrbitFriendly", "onCompleteTarget", GameObject.Find("Galaxy Generator")));
     }
     
     GameObject GenerateShip(Vector3 pos, bool enemy = false)
@@ -248,7 +248,7 @@ public class ShipManager : MonoBehaviour {
             _ship.gameObject.GetComponent<Orbit>().distance = Vector3.Distance(Vector3.zero, _ship.transform.position);
             _ship.gameObject.GetComponent<Orbit>().speed = Random.Range(40, 90);
         }
-        iTween.MoveTo(enemyFleet, iTween.Hash("name", "enemyPath", "path", pathE, "speed", 30.0f, "orienttopath", true, "looktime", 0.6f, "easetype", iTween.EaseType.linear, "oncomplete", "activateOrbitEnemy", "onCompleteTarget", GameObject.Find("Galaxy Generator")));
+        iTween.MoveTo(enemyFleet, iTween.Hash("name", "enemyPath", "path", pathE, "speed", 50.0f, "orienttopath", true, "looktime", 0.6f, "easetype", iTween.EaseType.linear, "oncomplete", "activateOrbitEnemy", "onCompleteTarget", GameObject.Find("Galaxy Generator")));
     }
 
     void activateOrbitEnemy()

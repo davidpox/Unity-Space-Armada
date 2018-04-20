@@ -54,13 +54,15 @@ public class CameraManager : MonoBehaviour {
         if (Random.Range(0.0f, 1.0f) > 0.85f)        // lower chance (25%) for spaceship cam because they're quite sickening, really. 
         {
             int cam = Mathf.FloorToInt(Random.Range(0, AllSpaceShipCameras.Count));
-            SwitchCameras(AllSpaceShipCameras[cam]);
+            if(AllSpaceShipCameras[cam])
+                SwitchCameras(AllSpaceShipCameras[cam]);
             
         }
         else
         {
             int cam = Mathf.FloorToInt(Random.Range(0, PlanetCams.Count));
-            SwitchCameras(PlanetCams[cam]);
+            if (PlanetCams[cam])
+                SwitchCameras(PlanetCams[cam]);
         }
     }
 
@@ -68,10 +70,12 @@ public class CameraManager : MonoBehaviour {
     {
         foreach(GameObject cam in cameras)
         {
+            if (!cam) { break; }
             cam.SetActive(false);
         }
         foreach (GameObject cam in PlanetCams)
         {
+            if (!cam) { break; }
             cam.SetActive(false);
         }
         foreach (GameObject cam in FriendlySpaceShipCameras)
@@ -81,6 +85,7 @@ public class CameraManager : MonoBehaviour {
         }
         foreach (GameObject cam in AllSpaceShipCameras)
         {
+            if (!cam) { break; }
             cam.SetActive(false);
         }
 
@@ -88,7 +93,6 @@ public class CameraManager : MonoBehaviour {
 
         camera.SetActive(true);
     }
-
 
     void OnTriggerEnter(Collider coll)
     {

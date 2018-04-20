@@ -254,8 +254,8 @@ public class BossStarGenerator : MonoBehaviour {
 
             float angle = Random.Range(0.0f, 360.0f);
             float distance = Random.Range(distanceMin, distanceMax);
-            float x = (Mathf.Cos(angle * Mathf.Deg2Rad) * distance) * Random.Range(1.0f, 1.6f);
-            float z = (Mathf.Sin(angle * Mathf.Deg2Rad) * distance) * Random.Range(0.9f, 1.2f);
+            float x = (Mathf.Cos(angle * Mathf.Deg2Rad) * distance) * Random.Range(1.5f, 2.0f);
+            float z = (Mathf.Sin(angle * Mathf.Deg2Rad) * distance) * Random.Range(1.5f, 2.0f);
             float y = Random.Range(-10.0f, 10.0f);
             float scale = Random.Range(0.8f, 3.0f);
 

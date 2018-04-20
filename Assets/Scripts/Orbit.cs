@@ -88,9 +88,9 @@ public class Orbit : MonoBehaviour
 
             if(speedtimer >= 10.0f)
             {
-                speed = Random.Range(40, 90) * (health / 100) - (turrets.Count * 2);
-                if(speed < 10.0f) { speed = 10.0f; }
-                //speed = Mathf.Clamp(speed, 5.0f, 100.0f);           // ensures that the vehicle has at least a little bit of speed. 
+                speed = Random.Range(40.0f, 90.0f) * (health / 100);
+                if(speed < 40.0f) { speed = 40.0f; }
+                                                                   // ensures that the vehicle has at least a little bit of speed. 
                 searchRadius *= 1.05f;                              // increase vehicle visibility by 5% every 10 secs to ensure all ships are found after a while
                 speedtimer = 0.0f;
             }
@@ -123,14 +123,17 @@ public class Orbit : MonoBehaviour
         }
         else if(!dead)
         {           // If the ship has died, move towards the center. 
-            gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, Vector3.zero, Time.deltaTime * 5);
+            GameObject cam = GameObject.Find("CameraTriggers");
+            GameObject thisCam = transform.Find("Body/Visor/Camera").gameObject;
+            if (!thisCam)
+            {
+                cam.GetComponent<CameraManager>().AllSpaceShipCameras.Remove(thisCam);
+                if (thisCam.activeInHierarchy) { cam.GetComponent<CameraManager>().randomCamera(); }
+            }
+            gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, Vector3.zero, Time.deltaTime * 15);
             if (gameObject.transform.position == Vector3.zero)
             {
                 dead = true;
-                GameObject cam = GameObject.Find("CameraTriggers");
-                GameObject thisCam = transform.Find("Body/Visor/Camera").gameObject;
-                cam.GetComponent<CameraManager>().AllSpaceShipCameras.Remove(thisCam);
-                cam.GetComponent<CameraManager>().randomCamera();
                 Destroy(_pivot.gameObject);
             }
         }

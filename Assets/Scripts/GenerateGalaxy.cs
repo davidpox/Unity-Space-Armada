@@ -49,9 +49,9 @@ public class GenerateGalaxy : MonoBehaviour {
         Sun.transform.parent = GalaxyParent.transform;
         
         
-        float A = 80.0f;       // galaxy size                      def: 40.0f                     80.0f; 
-        float B = 500.12f;    // Buldge-to-arm  (arm sweep)       def: 11.12f                  500.12f
-        float N = 0.806f;       // "Tightness" lower = less tight   def: 0.706f                   0.806f;
+        float A = 80.0f;       // galaxy size                                         default: 40.0f            mine:   80.0f; 
+        float B = 500.12f;    // Buldge-to-arm  (arm sweep)                           default: 11.12f           mine: 500.12f;
+        float N = Random.Range(0.4f, 0.9f);       // "Tightness" lower = less tight   default: 0.706f           mine:  0.806f;
 
         GameObject starInstance;
         Vector3 starScale;
@@ -74,6 +74,56 @@ public class GenerateGalaxy : MonoBehaviour {
                 starScale.z = scale;
                 starInstance.transform.localScale = starScale;
             }
+        }
+
+        return GalaxyParent;
+    }
+
+    GameObject spawnStarsRandom(string GalaxyName)
+    {
+        GameObject GalaxyParent = new GameObject(GalaxyName);
+        GameObject StarParent = new GameObject("StarParent");
+        StarParent.transform.parent = GalaxyParent.transform;
+
+        GameObject Sun = Instantiate(sun);
+        Sun.transform.parent = GalaxyParent.transform;
+
+        GameObject starInstance;
+
+        for (int i = 0; i < 500; i++)
+        {
+            float randomAngle = Random.Range(0.0f, 360.0f);
+            float randomDistance = Random.Range(0.0f, 50.0f);
+            float x = Mathf.Cos(randomAngle) * randomDistance;
+            float z = Mathf.Sin(randomAngle) * randomDistance;
+
+            starInstance = Instantiate(star, transform.position + new Vector3(x, 0, z), star.transform.rotation);
+            starInstance.transform.parent = StarParent.transform;
+        }
+
+        return GalaxyParent;
+    }
+
+    GameObject spawnStarsDisk(string GalaxyName)
+    {
+        GameObject GalaxyParent = new GameObject(GalaxyName);
+        GameObject StarParent = new GameObject("StarParent");
+        StarParent.transform.parent = GalaxyParent.transform;
+
+        GameObject Sun = Instantiate(sun);
+        Sun.transform.parent = GalaxyParent.transform;
+
+        GameObject starInstance;
+
+        for (int i = 0; i < 500; i++)
+        {
+            float randomAngle = Random.Range(0.0f, 360.0f);
+            float randomDistance = Random.Range(20.0f, 50.0f);
+            float x = Mathf.Cos(randomAngle) * randomDistance;
+            float z = Mathf.Sin(randomAngle) * randomDistance;
+
+            starInstance = Instantiate(star, transform.position + new Vector3(x, 0, z), star.transform.rotation);
+            starInstance.transform.parent = StarParent.transform;
         }
 
         return GalaxyParent;
